@@ -3,7 +3,7 @@ export const siteConfig = {
   author: 'Ameyur1',
   description: '记录生活、学习、技术与持续发生的小事。',
   tagline: '隱約雷鳴，陰霾天空',
-  siteUrl: 'https://example.com', // 占位值：部署后改为真实网址
+  siteUrl: 'https://amelife.pages.dev/', // 占位值：部署后改为真实网址
   avatar: '/images/avatars/avatar-placeholder.png',
   backgrounds: {
     light: '/images/backgrounds/amelife-dawn.png',
