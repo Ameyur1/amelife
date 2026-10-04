@@ -1,0 +1,5 @@
+---
+import { getCollection } from 'astro:content'; import BaseLayout from '../layouts/BaseLayout.astro'; import PageHeader from '../components/PageHeader.astro'; import { formatDate, sortPosts } from '../utils/posts';
+const posts=sortPosts(await getCollection('blog')); const years=Object.groupBy(posts,p=>String(p.data.date.getFullYear()));
+---
+<BaseLayout title="归档"><PageHeader eyebrow="ARCHIVE" title="归档" description="按时间回望，看看一路写下了什么。" /><section class="shell section no-top archive">{Object.entries(years).sort((a,b)=>Number(b[0])-Number(a[0])).map(([year,items])=><div class="archive-year"><h2>{year}</h2><div>{items && Object.entries(Object.groupBy(items,p=>`${p.data.date.getMonth()+1} 月`)).map(([month,monthPosts])=><section><h3>{month}</h3><ul>{monthPosts?.map(p=><li><time>{formatDate(p.data.date)}</time><a href={`/posts/${p.id}/`}>{p.data.title}</a></li>)}</ul></section>)}</div></div>)}</section></BaseLayout>

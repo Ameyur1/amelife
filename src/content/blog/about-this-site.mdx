@@ -1,0 +1,29 @@
+---
+title: "关于这个网站"
+description: "记录 Amelife 的技术选择、内容方式与下一步计划。"
+date: 2026-09-10
+cover: "/images/posts/site-story.svg"
+category: "技术"
+tags: ["Amelife", "Astro", "随笔"]
+draft: false
+featured: false
+---
+
+Amelife 使用 Astro、TypeScript 与 Markdown / MDX 构建，默认生成纯静态页面。
+
+## 为什么选择 Astro
+
+博客以内容为主，不需要复杂后台。Astro 能在构建阶段完成大部分工作，浏览器收到的页面更轻，也更容易部署到 Cloudflare Pages。
+
+## 内容如何管理
+
+文章集中在 `src/content/blog/`。每篇文章的标题、日期、分类、标签等信息都写在文件顶部的 Frontmatter 中。
+
+## 以后可以增加什么
+
+- 第三方评论系统
+- 每日或随机背景
+- 不同页面的独立背景
+- 更完整的全文搜索
+
+这些都可以在现有结构上继续扩展，不需要推倒重来。

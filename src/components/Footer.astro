@@ -1,0 +1,4 @@
+---
+import { siteConfig } from '../config';
+---
+<footer class="site-footer"><div class="shell footer-grid"><div><strong>{siteConfig.siteName}</strong><p>{siteConfig.footer}</p></div><div class="socials">{siteConfig.socialLinks.map((link) => <a href={link.href}>{link.label}</a>)}</div><small>© {new Date().getFullYear()} {siteConfig.siteName}. Built with Astro.</small></div></footer>

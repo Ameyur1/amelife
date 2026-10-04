@@ -1,0 +1,9 @@
+---
+import type { BlogPost } from '../utils/posts';
+import { formatDate, readingTime } from '../utils/posts';
+const { post, compact = false } = Astro.props as { post: BlogPost; compact?: boolean };
+---
+<article class:list={['post-card', compact && 'compact']}>
+  {post.data.cover && !compact && <a class="post-cover" href={`/posts/${post.id}/`}><img src={post.data.cover} alt={`${post.data.title} 封面`} loading="lazy" /></a>}
+  <div class="post-card-body"><div class="eyebrow"><span>{post.data.category}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></div><h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><div class="post-meta"><span>{readingTime(post.body)} 分钟阅读</span><span>{post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')}</span></div></div>
+</article>

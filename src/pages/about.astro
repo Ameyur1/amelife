@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import PageHeader from '../components/PageHeader.astro'; import { siteConfig } from '../config';
+---
+<BaseLayout title="关于"><PageHeader eyebrow="ABOUT" title="关于这个角落" description="不急着定义自己，先诚实地记录正在发生的变化。" /><section class="shell section no-top about-grid"><div class="about-intro"><img src={siteConfig.avatar} alt="Amelife 示例头像" /><div><h2>你好，这里是 {siteConfig.siteName}</h2><p>这是一个占位版自我介绍。以后你可以在这里写自己的经历、关注的问题，或为什么开始记录。</p><p>无需公开真实姓名；你可以只使用昵称、笔名或一个喜欢的称呼。</p></div></div><div class="about-cards"><article><span>01</span><h3>正在学习</h3><p>Java、Web 开发，以及如何把知识整理得更清楚。</p></article><article><span>02</span><h3>兴趣爱好</h3><p>阅读、音乐、散步，以及发现日常生活里不起眼的细节。</p></article><article><span>03</span><h3>技术栈</h3><p>Astro、TypeScript、Markdown、CSS 与 Cloudflare Pages。</p></article><article><span>04</span><h3>保持联系</h3><p>社交链接和邮箱统一在 src/config.ts 中维护。</p></article></div></section></BaseLayout>

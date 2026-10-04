@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro'; import PostCard from '../components/PostCard.astro';
+import { siteConfig } from '../config'; import { projects } from '../data/projects'; import { sortPosts } from '../utils/posts';
+const posts = sortPosts(await getCollection('blog')); const latest = posts.slice(0, 3); const featured = posts.filter((p) => p.data.featured).slice(0, 2);
+const bgStyle = `--hero-light:url(${siteConfig.backgrounds.light});--hero-dark:url(${siteConfig.backgrounds.dark});--overlay-light:${siteConfig.backgrounds.overlayLight};--overlay-dark:${siteConfig.backgrounds.overlayDark}`;
+---
+<BaseLayout>
+  <section class="hero" style={bgStyle}><div class="shell hero-inner"><img class="avatar" src={siteConfig.avatar} alt="Amelife 示例头像" /><p class="kicker light">PERSONAL FIELD NOTES</p><h1>{siteConfig.siteName}</h1><p>{siteConfig.tagline}</p><div class="hero-actions"><a class="button primary" href="/posts/">开始阅读</a><a class="button ghost" href="/about/">认识这里</a></div><div class="hero-socials">{siteConfig.socialLinks.map((link) => <a href={link.href}>{link.label}</a>)}</div></div></section>
+  <section class="section shell"><div class="section-heading"><div><p class="kicker">RECENT NOTES</p><h2>最近写下的</h2></div><a href="/posts/">全部文章</a></div><div class="card-grid">{latest.map((post) => <PostCard post={post} />)}</div></section>
+  <section class="section soft"><div class="shell"><div class="section-heading"><div><p class="kicker">FEATURED</p><h2>值得先读</h2></div></div><div class="featured-grid">{featured.map((post) => <PostCard post={post} compact />)}</div></div></section>
+  <section class="section shell"><div class="section-heading"><div><p class="kicker">SIDE PROJECTS</p><h2>正在做的事</h2></div><a href="/projects/">查看项目</a></div><div class="project-strip">{projects.slice(0, 3).map((project, i) => <a class="project-peek" href="/projects/"><span>0{i + 1}</span><div><h3>{project.name}</h3><p>{project.description}</p></div></a>)}</div></section>
+</BaseLayout>

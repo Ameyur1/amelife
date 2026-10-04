@@ -1,0 +1,18 @@
+---
+import { siteConfig } from '../config';
+const path = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="shell nav-wrap">
+    <a class="brand" href="/" aria-label={`${siteConfig.siteName} 首页`}><span class="brand-mark">A</span><span>{siteConfig.siteName}</span></a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">打开导航</span>☰</button>
+    <nav id="site-nav" aria-label="主导航">{siteConfig.navigation.map((item) => <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>)}</nav>
+    <a class="search-button" href="/search/" aria-label="搜索文章" title="搜索文章">⌕</a>
+    <button class="theme-button" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLButtonElement>('.menu-button'); const nav = document.querySelector<HTMLElement>('#site-nav');
+  menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') === 'true'; menu.setAttribute('aria-expanded', String(!open)); nav?.classList.toggle('open', !open); });
+  document.querySelector<HTMLButtonElement>('.theme-button')?.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem('amelife-theme', next); });
+</script>

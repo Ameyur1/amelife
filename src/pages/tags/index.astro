@@ -1,0 +1,5 @@
+---
+import { getCollection } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import PageHeader from '../../components/PageHeader.astro'; import { sortPosts } from '../../utils/posts';
+const posts=sortPosts(await getCollection('blog')); const counts=new Map<string,number>(); posts.flatMap(p=>p.data.tags).forEach(t=>counts.set(t,(counts.get(t)||0)+1)); const tags=[...counts].sort((a,b)=>b[1]-a[1]);
+---
+<BaseLayout title="标签"><PageHeader eyebrow="TAGS" title="标签" description="一些反复出现的关键词，也是一张不严格的内容地图。" /><section class="shell section no-top tag-cloud">{tags.map(([tag,count]) => <a href={`/tags/${encodeURIComponent(tag)}/`}><strong>#{tag}</strong><span>{count} 篇</span></a>)}</section></BaseLayout>

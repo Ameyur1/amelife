@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import PageHeader from '../components/PageHeader.astro'; import { projects } from '../data/projects';
+---
+<BaseLayout title="项目"><PageHeader eyebrow="PROJECTS" title="项目" description="把想法做成能被使用、被看见的小东西。以下均为可删除的示例数据。" /><section class="shell section no-top projects-grid">{projects.map(project=><article class="project-card"><img src={project.image} alt={`${project.name} 示例项目插图`} /><div><div class="eyebrow"><span>{project.status}</span></div><h2>{project.name}</h2><p>{project.description}</p><ul class="stack-list">{project.stack.map(item=><li>{item}</li>)}</ul><div class="project-links">{project.github === '#' ? <span>GitHub · 待添加</span> : <a href={project.github}>GitHub</a>}{project.demo === '#' ? <span>Demo · 待添加</span> : <a href={project.demo}>Demo</a>}</div></div></article>)}</section></BaseLayout>
