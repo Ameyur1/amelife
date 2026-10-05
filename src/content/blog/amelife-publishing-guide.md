@@ -4,6 +4,8 @@ description: "从新建 Markdown 文章到推送 GitHub，并由 Cloudflare 自�
 date: 2026-10-05
 category: "杂谈"
 tags: ["Amelife", "博客", "教程"]
+cover: "/images/posts/default.jpg"
+coverAlt: "文章封面说明"
 draft: false
 featured: false
 ---
