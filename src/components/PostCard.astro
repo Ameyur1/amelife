@@ -1,11 +1,12 @@
 ---
 import type { BlogPost } from '../utils/posts';
-import { formatDate, getPostCover, readingTime } from '../utils/posts';
+import { formatDate, getPostCover, getPostCoverPosition, readingTime } from '../utils/posts';
 const { post, compact = false } = Astro.props as { post: BlogPost; compact?: boolean };
 const cover = getPostCover(post);
+const coverPosition = getPostCoverPosition(post);
 const coverAlt = post.data.coverAlt ?? (post.data.cover ? `${post.data.title} 封面` : `${post.data.category}板块默认封面`);
 ---
 <article class:list={['post-card', compact && 'compact']}>
-  {!compact && <a class="post-cover" href={`/posts/${post.id}/`}><img src={cover} alt={coverAlt} loading="lazy" /></a>}
+  {!compact && <a class="post-cover" href={`/posts/${post.id}/`}><img src={cover} alt={coverAlt} loading="lazy" style={`object-position: ${coverPosition};`} /></a>}
   <div class="post-card-body"><div class="eyebrow"><span>{post.data.category}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></div><h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><div class="post-meta"><span>{readingTime(post.body)} 分钟阅读</span><span>{post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')}</span></div></div>
 </article>

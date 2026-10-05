@@ -91,6 +91,7 @@ featured: false
 - `tags`：文章标签，可以填写多个。
 - `cover`：自定义封面图片路径；不填写时，会按照文章板块自动选择默认封面。
 - `coverAlt`：封面的文字说明，方便图片无法显示时识别内容。
+- `coverPosition`：封面裁切焦点，例如 `"center 25%"` 会让画面更偏向图片上方。
 - `draft: false`：公开发布文章。
 - `draft: true`：保存为草稿，网站不会显示。
 - `featured: true`：设为推荐文章。
@@ -123,9 +124,12 @@ my-new-post.jpg
 ```yaml
 cover: "/images/posts/my-new-post.jpg"
 coverAlt: "这张封面的内容说明"
+coverPosition: "center 25%"
 ```
 
 封面会同时显示在文章列表卡片和文章正文顶部。如果没有填写 `cover`，网站会自动显示该文章所属板块的默认封面。
+
+竖图在横向封面框中会裁掉一部分上下内容。如果人物的脸偏上，可以把 `coverPosition` 设为 `"center 20%"` 到 `"center 30%"`；数值越小，显示区域越靠近图片顶部。横图一般不需要填写这一项。
 
 ## 四、编写正文
 
