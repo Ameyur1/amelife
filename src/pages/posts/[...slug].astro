@@ -1,11 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import { formatDate, readingTime, sortPosts } from '../../utils/posts';
+import { getCollection, render } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import { formatDate, getPostCover, readingTime, sortPosts } from '../../utils/posts';
 export async function getStaticPaths() { const posts = sortPosts(await getCollection('blog')); return posts.map((post, index) => ({ params: { slug: post.id }, props: { post, previous: posts[index + 1], next: posts[index - 1] } })); }
 const { post, previous, next } = Astro.props; const { Content, headings } = await render(post);
 const tocHeadings = headings.filter((heading) => heading.depth <= 3);
+const cover = getPostCover(post);
+const coverAlt = post.data.coverAlt ?? (post.data.cover ? `${post.data.title} 封面` : `${post.data.category}板块默认封面`);
 ---
-<BaseLayout title={post.data.title} description={post.data.description} image={post.data.cover} article>
-  <article class="article shell"><header class="article-header"><p class="kicker">{post.data.category}</p><h1>{post.data.title}</h1><p class="lede">{post.data.description}</p><div class="article-meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><span>约 {readingTime(post.body)} 分钟</span>{post.data.updated && <span>更新于 {formatDate(post.data.updated)}</span>}</div>{post.data.cover && <img class="article-cover" src={post.data.cover} alt={post.data.coverAlt ?? `${post.data.title} 封面`} />}</header>
+<BaseLayout title={post.data.title} description={post.data.description} image={cover} article>
+  <article class="article shell"><header class="article-header"><p class="kicker">{post.data.category}</p><h1>{post.data.title}</h1><p class="lede">{post.data.description}</p><div class="article-meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time><span>约 {readingTime(post.body)} 分钟</span>{post.data.updated && <span>更新于 {formatDate(post.data.updated)}</span>}</div><img class="article-cover" src={cover} alt={coverAlt} /></header>
     <div class:list={['article-layout', tocHeadings.length === 0 && 'no-toc']}>{tocHeadings.length > 0 && <aside class="toc" aria-label="文章目录"><strong>目录</strong><ol>{tocHeadings.map((h) => <li class={`depth-${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></aside>}<div class="prose"><Content /><div class="tag-row">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div></div></div>
     <nav class="post-nav" aria-label="相邻文章">{previous ? <a href={`/posts/${previous.id}/`}><span>上一篇</span><strong>{previous.data.title}</strong></a> : <span />}{next && <a class="next" href={`/posts/${next.id}/`}><span>下一篇</span><strong>{next.data.title}</strong></a>}</nav>
     <section class="comment-slot" aria-label="评论预留区域"><strong>评论区预留</strong><p>当前版本未接入评论服务；未来可在此加入第三方评论组件，无需数据库。</p></section>

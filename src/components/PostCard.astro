@@ -1,9 +1,9 @@
 ---
 import type { BlogPost } from '../utils/posts';
-import { formatDate, readingTime } from '../utils/posts';
+import { formatDate, getPostCover, readingTime } from '../utils/posts';
 const { post, compact = false } = Astro.props as { post: BlogPost; compact?: boolean };
-const cover = post.data.cover ?? '/images/posts/default-cover.svg';
-const coverAlt = post.data.coverAlt ?? `${post.data.title} 封面`;
+const cover = getPostCover(post);
+const coverAlt = post.data.coverAlt ?? (post.data.cover ? `${post.data.title} 封面` : `${post.data.category}板块默认封面`);
 ---
 <article class:list={['post-card', compact && 'compact']}>
   {!compact && <a class="post-cover" href={`/posts/${post.id}/`}><img src={cover} alt={coverAlt} loading="lazy" /></a>}
