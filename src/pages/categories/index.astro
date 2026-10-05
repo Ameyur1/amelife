@@ -2,5 +2,10 @@
 import { getCollection } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import PageHeader from '../../components/PageHeader.astro'; import { sortPosts } from '../../utils/posts';
 const posts = sortPosts(await getCollection('blog'));
 const groups = (['学术', '杂谈', '日常'] as const).map((name) => [name, posts.filter((post) => post.data.category === name)] as const);
+const categoryVisuals = {
+  学术: { image: '/images/posts/category-academic.jpg', position: 'center 25%' },
+  杂谈: { image: '/images/posts/category-essay.jpg', position: 'center 42%' },
+  日常: { image: '/images/posts/category-daily.jpeg', position: 'center 24%' },
+};
 ---
-<BaseLayout title="分类"><PageHeader eyebrow="CATEGORIES" title="分类" description="从学术、杂谈与日常三个板块进入。" /><section class="shell section no-top group-grid">{groups.map(([name, items]) => <a class="group-card" href={`/categories/${encodeURIComponent(name)}/`}><h2>{name}</h2><p>{items?.map((p) => p.data.title).slice(0,2).join(' · ')}</p></a>)}</section></BaseLayout>
+<BaseLayout title="分类"><PageHeader eyebrow="CATEGORIES" title="分类" description="从学术、杂谈与日常三个板块进入。" /><section class="shell section no-top group-grid">{groups.map(([name, items]) => <a class="group-card category-cover" href={`/categories/${encodeURIComponent(name)}/`} style={`--category-cover: url(${categoryVisuals[name].image}); --category-position: ${categoryVisuals[name].position};`}><div><h2>{name}</h2><p>{items?.map((p) => p.data.title).slice(0,2).join(' · ')}</p></div></a>)}</section></BaseLayout>
