@@ -65,6 +65,8 @@ description: "用一两句话介绍这篇文章。"
 date: 2026-10-05
 category: "日常"
 tags: ["随笔", "生活"]
+cover: "/images/posts/my-new-post.jpg"
+coverAlt: "文章封面说明"
 draft: false
 featured: false
 ---
@@ -87,12 +89,37 @@ featured: false
 - `date`：发布日期，格式为“年-月-日”。
 - `category`：文章板块，只填写“学术”“杂谈”或“日常”。
 - `tags`：文章标签，可以填写多个。
+- `cover`：自定义封面图片路径；不填写时，文章列表会显示默认封面。
+- `coverAlt`：封面的文字说明，方便图片无法显示时识别内容。
 - `draft: false`：公开发布文章。
 - `draft: true`：保存为草稿，网站不会显示。
 - `featured: true`：设为推荐文章。
 - `featured: false`：作为普通文章发布。
 
-## 三、编写正文
+## 三、自定义文章封面
+
+把准备好的封面图片复制到：
+
+```text
+public\images\posts
+```
+
+图片建议使用横向的 `JPG`、`PNG` 或 `WebP` 文件，推荐尺寸为 `1600 × 900`。文件名建议使用英文，例如：
+
+```text
+my-new-post.jpg
+```
+
+然后在文章开头加入：
+
+```yaml
+cover: "/images/posts/my-new-post.jpg"
+coverAlt: "这张封面的内容说明"
+```
+
+封面会同时显示在文章列表卡片和文章正文顶部。如果没有填写 `cover`，文章列表会自动使用网站的默认封面。
+
+## 四、编写正文
 
 文章正文使用 Markdown 格式。
 
@@ -134,7 +161,7 @@ System.out.println("Hello, Amelife!");
 ```
 ````
 
-## 四、本地预览
+## 五、本地预览
 
 想在发布前检查文章效果，可以在项目终端运行：
 
@@ -146,7 +173,7 @@ npm run dev
 
 这一步不是必须的，确认内容没有问题也可以直接发布。
 
-## 五、发布文章
+## 六、发布文章
 
 保存文章后，打开 PowerShell，依次运行：
 
@@ -175,7 +202,7 @@ Everything up-to-date
 
 表示没有新的修改需要上传。请检查文章是否已经保存，以及是否在正确的项目目录中。
 
-## 六、等待网站更新
+## 七、等待网站更新
 
 推送成功后，Cloudflare 会自动获取 GitHub 上的新内容并重新构建网站，不需要再次手动连接仓库。
 

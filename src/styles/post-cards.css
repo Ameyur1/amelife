@@ -1,0 +1,23 @@
+.list-stack {
+  grid-auto-rows: 1fr;
+}
+
+.list-stack .post-card {
+  grid-template-columns: 180px minmax(0, 1fr);
+  min-height: 350px;
+}
+
+.list-stack .post-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-stack .post-meta {
+  margin-top: auto;
+}
+
+@media (max-width: 640px) {
+  .list-stack .post-card {
+    min-height: auto;
+  }
+}
