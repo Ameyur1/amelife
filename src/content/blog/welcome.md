@@ -4,7 +4,7 @@ description: "这是整个网站的起点，也是一篇介绍内容结构的示
 date: 2026-10-01
 updated: 2026-10-01
 cover: "/images/posts/welcome.svg"
-category: "生活"
+category: "日常"
 tags: ["Amelife", "随笔"]
 draft: false
 featured: true

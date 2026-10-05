@@ -2,7 +2,7 @@
 title: "Amelife 博客文章发布教程"
 description: "从新建 Markdown 文章到推送 GitHub，并由 Cloudflare 自动更新网站的完整步骤。"
 date: 2026-10-05
-category: "网站"
+category: "杂谈"
 tags: ["Amelife", "博客", "教程"]
 draft: false
 featured: false
@@ -63,7 +63,7 @@ website-update.md
 title: "文章标题"
 description: "用一两句话介绍这篇文章。"
 date: 2026-10-05
-category: "生活"
+category: "日常"
 tags: ["随笔", "生活"]
 draft: false
 featured: false
@@ -85,7 +85,7 @@ featured: false
 - `title`：文章标题。
 - `description`：文章简介，会显示在文章列表和搜索结果中。
 - `date`：发布日期，格式为“年-月-日”。
-- `category`：文章分类，例如“生活”“Java”“网站”。
+- `category`：文章板块，只填写“学术”“杂谈”或“日常”。
 - `tags`：文章标签，可以填写多个。
 - `draft: false`：公开发布文章。
 - `draft: true`：保存为草稿，网站不会显示。
