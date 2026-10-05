@@ -4,6 +4,7 @@ description: "这是整个网站的起点，也是一篇介绍内容结构的示
 date: 2026-10-05
 updated: 2026-10-05
 category: "日常"
+coverPosition: "center 25%"
 tags: [ "随笔"]
 draft: false
 featured: true

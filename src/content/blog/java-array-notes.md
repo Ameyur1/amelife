@@ -2,7 +2,6 @@
 title: "Java 数组学习笔记"
 description: "从声明、初始化到常见遍历方式，整理 Java 数组的基础知识。"
 date: 2026-09-24
-cover: "/images/posts/java-array.svg"
 category: "学术"
 tags: ["Java", "学习", "学习笔记"]
 draft: false
