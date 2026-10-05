@@ -16,6 +16,10 @@
   margin-top: auto;
 }
 
+.group-card h2 {
+  margin-top: 42px;
+}
+
 @media (max-width: 640px) {
   .list-stack .post-card {
     min-height: auto;

@@ -3,4 +3,4 @@ import { getCollection } from 'astro:content'; import BaseLayout from '../../lay
 const posts = sortPosts(await getCollection('blog'));
 const groups = (['学术', '杂谈', '日常'] as const).map((name) => [name, posts.filter((post) => post.data.category === name)] as const);
 ---
-<BaseLayout title="分类"><PageHeader eyebrow="CATEGORIES" title="分类" description="从学术、杂谈与日常三个板块进入。" /><section class="shell section no-top group-grid">{groups.map(([name, items]) => <a class="group-card" href={`/categories/${encodeURIComponent(name)}/`}><span>{String(items?.length ?? 0).padStart(2,'0')}</span><h2>{name}</h2><p>{items?.map((p) => p.data.title).slice(0,2).join(' · ')}</p></a>)}</section></BaseLayout>
+<BaseLayout title="分类"><PageHeader eyebrow="CATEGORIES" title="分类" description="从学术、杂谈与日常三个板块进入。" /><section class="shell section no-top group-grid">{groups.map(([name, items]) => <a class="group-card" href={`/categories/${encodeURIComponent(name)}/`}><h2>{name}</h2><p>{items?.map((p) => p.data.title).slice(0,2).join(' · ')}</p></a>)}</section></BaseLayout>
