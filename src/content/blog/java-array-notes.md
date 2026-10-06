@@ -3,9 +3,9 @@ title: "Java 数组学习笔记"
 description: "从声明、初始化到常见遍历方式，整理 Java 数组的基础知识。"
 date: 2026-09-24
 category: "学术"
-tags: ["Java", "学习", "学习笔记"]
+tags: ["Java", "学习"]
 draft: false
-featured: true
+featured: false
 ---
 
 数组用于保存一组**类型相同**的数据。它的长度在创建后固定，适合处理数量明确、需要按索引访问的元素。
