@@ -28,25 +28,56 @@
   transition: background 0.45s ease;
 }
 
+.music-dock {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1120px) 150px;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  width: min(1540px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.music-brand,
+.music-dock-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 0.56rem;
+  letter-spacing: 0.15em;
+}
+
+.music-brand strong,
+.music-dock-meta strong {
+  color: color-mix(in srgb, var(--music-accent) 76%, white);
+  font-size: 0.69rem;
+  letter-spacing: 0.18em;
+}
+
+.music-dock-meta {
+  align-items: flex-end;
+  text-align: right;
+}
+
 .music-shell {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 16px;
-  width: min(820px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 11px 0 calc(11px + env(safe-area-inset-bottom));
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 15px;
+  width: 100%;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
 }
 
 .music-cover {
   position: relative;
   align-self: start;
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   padding: 0;
   overflow: hidden;
   background: #0b1d2d;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 15px;
+  border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
 }
@@ -100,7 +131,13 @@
 .music-player.is-playing .music-equalizer i:nth-child(3) { animation: equalize 0.8s 0.2s ease-in-out infinite alternate; }
 .music-player.is-playing .music-equalizer i:nth-child(4) { animation: equalize 0.58s 0.08s ease-in-out infinite alternate; }
 
-.music-main { min-width: 0; }
+.music-main {
+  display: grid;
+  grid-template-columns: minmax(210px, 0.85fr) minmax(300px, 1.35fr) minmax(300px, 1fr);
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
 
 .music-heading {
   display: flex;
@@ -166,7 +203,7 @@
   grid-template-columns: 31px 1fr 31px;
   align-items: center;
   gap: 7px;
-  margin-top: 11px;
+  margin-top: 0;
   color: rgba(255, 255, 255, 0.48);
   font-size: 0.62rem;
   font-variant-numeric: tabular-nums;
@@ -185,7 +222,7 @@
   grid-template-columns: 32px auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  margin-top: 9px;
+  margin-top: 0;
 }
 
 .music-mute,
@@ -243,7 +280,7 @@
 
 .music-playlist {
   max-height: 0;
-  padding: 0 max(20px, calc((100% - 820px) / 2));
+  padding: 0 max(24px, calc((100% - 1120px) / 2));
   overflow: hidden;
   opacity: 0;
   border-top: 1px solid transparent;
@@ -268,7 +305,7 @@
   letter-spacing: 0.16em;
 }
 
-.music-track-list { display: grid; gap: 5px; }
+.music-track-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
 
 .music-track {
   display: grid;
@@ -303,6 +340,37 @@
   to { height: 13px; }
 }
 
+@media (max-width: 1250px) {
+  .music-dock {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(940px, calc(100% - 32px));
+  }
+
+  .music-brand,
+  .music-dock-meta {
+    display: none;
+  }
+
+  .music-main {
+    grid-template-columns: minmax(190px, 0.8fr) minmax(260px, 1.2fr) minmax(260px, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .music-main {
+    display: block;
+  }
+
+  .music-timeline {
+    margin-top: 8px;
+  }
+
+  .music-controls {
+    margin-top: 7px;
+  }
+}
+
 @media (max-width: 640px) {
   .music-player {
     right: 0;
@@ -314,8 +382,8 @@
   .music-shell {
     grid-template-columns: 58px minmax(0, 1fr);
     gap: 12px;
-    width: calc(100% - 24px);
-    padding: 9px 0 calc(9px + env(safe-area-inset-bottom));
+    width: 100%;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
   }
 
   .music-cover { width: 58px; height: 58px; border-radius: 13px; }
@@ -325,15 +393,16 @@
   .music-transport { justify-content: center; }
   .music-timeline { margin-top: 8px; }
   .music-playlist { padding-inline: 12px; }
+  .music-track-list { grid-template-columns: 1fr; }
 }
 
 body {
-  padding-bottom: 102px;
+  padding-bottom: 78px;
 }
 
 @media (max-width: 640px) {
   body {
-    padding-bottom: 88px;
+    padding-bottom: 84px;
   }
 }
 

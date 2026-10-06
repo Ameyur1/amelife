@@ -10,7 +10,9 @@ const firstTrack = musicPlaylist[0];
   style={`--music-accent: ${firstTrack.accent}; --music-glow: ${firstTrack.glow};`}
 >
   <div class="music-player-glow" aria-hidden="true"></div>
-  <div class="music-shell">
+  <div class="music-dock">
+    <div class="music-brand" aria-hidden="true"><strong>AMELIFE</strong><span>PERSONAL RADIO</span></div>
+    <div class="music-shell">
     <button class="music-cover" type="button" data-list-toggle aria-expanded="false" aria-label="打开播放列表">
       <img data-cover src={firstTrack.cover} alt={`${firstTrack.album} 专辑封面`} />
       <span class="music-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -47,6 +49,8 @@ const firstTrack = musicPlaylist[0];
         <span class="music-album" data-album title={firstTrack.album}>{firstTrack.album}</span>
       </div>
     </div>
+    </div>
+    <div class="music-dock-meta" aria-hidden="true"><span>PRIVATE PLAYLIST</span><strong>{String(musicPlaylist.length).padStart(2, '0')} TRACKS</strong></div>
   </div>
 
   <div class="music-playlist" data-playlist aria-hidden="true">
