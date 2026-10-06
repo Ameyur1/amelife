@@ -1,21 +1,81 @@
-<aside class="music-player" data-music-player aria-label="音乐播放器">
-  <div class="music-disc" aria-hidden="true"><span>GH</span></div>
-  <div class="music-info">
-    <div class="music-heading">
-      <div><strong>Goodbye Happiness</strong><span>宇多田光</span></div>
-      <button class="music-mute" type="button" aria-label="静音" title="静音"><span aria-hidden="true">♫</span></button>
-    </div>
-    <div class="music-timeline">
-      <span data-current>0:00</span>
-      <input data-progress type="range" min="0" max="100" step="0.1" value="0" aria-label="播放进度" />
-      <span data-duration>0:00</span>
+---
+import { musicPlaylist } from '../config/music';
+const firstTrack = musicPlaylist[0];
+---
+
+<aside
+  class="music-player"
+  data-music-player
+  aria-label="音乐播放器"
+  style={`--music-accent: ${firstTrack.accent}; --music-glow: ${firstTrack.glow};`}
+>
+  <div class="music-player-glow" aria-hidden="true"></div>
+  <div class="music-shell">
+    <button class="music-cover" type="button" data-list-toggle aria-expanded="false" aria-label="打开播放列表">
+      <img data-cover src={firstTrack.cover} alt={`${firstTrack.album} 专辑封面`} />
+      <span class="music-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </button>
+
+    <div class="music-main">
+      <div class="music-heading">
+        <div>
+          <small>NOW PLAYING</small>
+          <strong data-title>{firstTrack.title}</strong>
+          <span data-artist>{firstTrack.artist}</span>
+        </div>
+        <button class="music-queue-toggle" type="button" data-list-toggle aria-expanded="false" aria-label="打开播放列表" title="播放列表">
+          <span aria-hidden="true">☷</span><b data-track-count>1 / {musicPlaylist.length}</b>
+        </button>
+      </div>
+
+      <div class="music-timeline">
+        <span data-current>0:00</span>
+        <input data-progress type="range" min="0" max="100" step="0.1" value="0" aria-label="播放进度" />
+        <span data-duration>0:00</span>
+      </div>
+
+      <div class="music-controls">
+        <button class="music-mute" type="button" aria-label="静音" title="静音"><span aria-hidden="true">♫</span></button>
+        <div class="music-transport">
+          <button class="music-skip" type="button" data-previous aria-label="上一首"><span aria-hidden="true">│◀</span></button>
+          <button class="music-toggle" type="button" aria-label={`播放 ${firstTrack.title}`}>
+            <span class="play-icon" aria-hidden="true">▶</span>
+            <span class="pause-icon" aria-hidden="true">Ⅱ</span>
+          </button>
+          <button class="music-skip" type="button" data-next aria-label="下一首"><span aria-hidden="true">▶│</span></button>
+        </div>
+        <span class="music-album" data-album title={firstTrack.album}>{firstTrack.album}</span>
+      </div>
     </div>
   </div>
-  <button class="music-toggle" type="button" aria-label="播放 Goodbye Happiness">
-    <span class="play-icon" aria-hidden="true">▶</span>
-    <span class="pause-icon" aria-hidden="true">Ⅱ</span>
-  </button>
-  <audio data-audio src="/audio/goodbye-happiness.mp3" preload="metadata"></audio>
+
+  <div class="music-playlist" data-playlist aria-hidden="true">
+    <div class="music-playlist-heading"><span>PLAYLIST</span><strong>{musicPlaylist.length} TRACKS</strong></div>
+    <div class="music-track-list">
+      {musicPlaylist.map((track, index) => (
+        <button
+          class:list={['music-track', index === 0 && 'is-active']}
+          type="button"
+          data-track
+          data-index={index}
+          data-src={track.src}
+          data-cover={track.cover}
+          data-title={track.title}
+          data-artist={track.artist}
+          data-album={track.album}
+          data-accent={track.accent}
+          data-glow={track.glow}
+        >
+          <span class="music-track-number">{String(index + 1).padStart(2, '0')}</span>
+          <img src={track.cover} alt="" loading="lazy" />
+          <span class="music-track-copy"><strong>{track.title}</strong><span>{track.artist} · {track.album}</span></span>
+          <span class="music-track-state" aria-hidden="true">●</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <audio data-audio src={firstTrack.src} preload="metadata"></audio>
 </aside>
 
 <script>
@@ -23,32 +83,85 @@
   const audio = player?.querySelector<HTMLAudioElement>('[data-audio]');
   const toggle = player?.querySelector<HTMLButtonElement>('.music-toggle');
   const mute = player?.querySelector<HTMLButtonElement>('.music-mute');
+  const previous = player?.querySelector<HTMLButtonElement>('[data-previous]');
+  const next = player?.querySelector<HTMLButtonElement>('[data-next]');
   const progress = player?.querySelector<HTMLInputElement>('[data-progress]');
   const current = player?.querySelector<HTMLElement>('[data-current]');
   const duration = player?.querySelector<HTMLElement>('[data-duration]');
+  const title = player?.querySelector<HTMLElement>('[data-title]');
+  const artist = player?.querySelector<HTMLElement>('[data-artist]');
+  const album = player?.querySelector<HTMLElement>('[data-album]');
+  const cover = player?.querySelector<HTMLImageElement>('[data-cover]');
+  const count = player?.querySelector<HTMLElement>('[data-track-count]');
+  const playlist = player?.querySelector<HTMLElement>('[data-playlist]');
+  const listToggles = [...(player?.querySelectorAll<HTMLButtonElement>('[data-list-toggle]') ?? [])];
+  const tracks = [...(player?.querySelectorAll<HTMLButtonElement>('[data-track]') ?? [])];
+  let currentIndex = 0;
 
   const formatTime = (seconds: number) => {
     if (!Number.isFinite(seconds)) return '0:00';
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
+    return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
   };
 
   const updateButton = () => {
     if (!player || !audio || !toggle) return;
     const playing = !audio.paused;
     player.classList.toggle('is-playing', playing);
-    toggle.setAttribute('aria-label', playing ? '暂停 Goodbye Happiness' : '播放 Goodbye Happiness');
+    toggle.setAttribute('aria-label', playing ? `暂停 ${title?.textContent ?? '音乐'}` : `播放 ${title?.textContent ?? '音乐'}`);
   };
+
+  const loadTrack = async (index: number, autoplay = false) => {
+    if (!audio || !player || tracks.length === 0) return;
+    currentIndex = (index + tracks.length) % tracks.length;
+    const track = tracks[currentIndex];
+    audio.src = track.dataset.src ?? '';
+    if (title) title.textContent = track.dataset.title ?? '';
+    if (artist) artist.textContent = track.dataset.artist ?? '';
+    if (album) {
+      album.textContent = track.dataset.album ?? '';
+      album.setAttribute('title', track.dataset.album ?? '');
+    }
+    if (cover) {
+      cover.src = track.dataset.cover ?? '';
+      cover.alt = `${track.dataset.album ?? track.dataset.title ?? ''} 专辑封面`;
+    }
+    if (count) count.textContent = `${currentIndex + 1} / ${tracks.length}`;
+    player.style.setProperty('--music-accent', track.dataset.accent ?? '#f3a45f');
+    player.style.setProperty('--music-glow', track.dataset.glow ?? '#214e68');
+    tracks.forEach((item, itemIndex) => item.classList.toggle('is-active', itemIndex === currentIndex));
+    if (current) current.textContent = '0:00';
+    if (duration) duration.textContent = '0:00';
+    if (progress) progress.value = '0';
+    audio.load();
+    if (autoplay) {
+      try { await audio.play(); } catch { /* Playback requires a user gesture. */ }
+    }
+    updateButton();
+  };
+
+  const setPlaylistOpen = (open: boolean) => {
+    if (!player || !playlist) return;
+    player.classList.toggle('is-open', open);
+    playlist.setAttribute('aria-hidden', String(!open));
+    listToggles.forEach((button) => {
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', open ? '关闭播放列表' : '打开播放列表');
+    });
+  };
+
+  listToggles.forEach((button) => button.addEventListener('click', () => setPlaylistOpen(!player?.classList.contains('is-open'))));
+  tracks.forEach((track, index) => track.addEventListener('click', () => loadTrack(index, true)));
 
   toggle?.addEventListener('click', async () => {
     if (!audio) return;
     if (audio.paused) {
-      try { await audio.play(); } catch { /* Browser blocked playback. */ }
-    } else {
-      audio.pause();
-    }
+      try { await audio.play(); } catch { /* Playback requires a user gesture. */ }
+    } else audio.pause();
     updateButton();
   });
+
+  previous?.addEventListener('click', () => loadTrack(currentIndex - 1, true));
+  next?.addEventListener('click', () => loadTrack(currentIndex + 1, true));
 
   mute?.addEventListener('click', () => {
     if (!audio || !mute || !player) return;
@@ -58,20 +171,13 @@
     mute.setAttribute('title', audio.muted ? '取消静音' : '静音');
   });
 
-  audio?.addEventListener('loadedmetadata', () => {
-    if (duration) duration.textContent = formatTime(audio.duration);
-  });
-
+  audio?.addEventListener('loadedmetadata', () => { if (duration) duration.textContent = formatTime(audio.duration); });
   audio?.addEventListener('timeupdate', () => {
     if (current) current.textContent = formatTime(audio.currentTime);
     if (progress && audio.duration) progress.value = String((audio.currentTime / audio.duration) * 100);
   });
-
-  progress?.addEventListener('input', () => {
-    if (audio?.duration) audio.currentTime = (Number(progress.value) / 100) * audio.duration;
-  });
-
+  progress?.addEventListener('input', () => { if (audio?.duration) audio.currentTime = (Number(progress.value) / 100) * audio.duration; });
   audio?.addEventListener('play', updateButton);
   audio?.addEventListener('pause', updateButton);
-  audio?.addEventListener('ended', updateButton);
+  audio?.addEventListener('ended', () => loadTrack(currentIndex + 1, true));
 </script>
