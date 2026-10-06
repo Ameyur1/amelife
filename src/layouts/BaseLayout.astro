@@ -1,9 +1,11 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import MusicPlayer from '../components/MusicPlayer.astro';
 import { siteConfig } from '../config';
 import '../styles/global.css';
 import '../styles/post-cards.css';
+import '../styles/music-player.css';
 interface Props { title?: string; description?: string; image?: string; article?: boolean }
 const { title, description = siteConfig.description, image, article = false } = Astro.props;
 const fullTitle = title ? `${title} · ${siteConfig.siteName}` : siteConfig.siteName;
@@ -25,5 +27,5 @@ const socialImage = image ? new URL(image, siteConfig.siteUrl) : undefined;
       (() => { const saved = localStorage.getItem('amelife-theme'); const system = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : system; })();
     </script>
   </head>
-  <body><a class="skip-link" href="#content">跳到正文</a><Header /><main id="content"><slot /></main><Footer /></body>
+  <body><a class="skip-link" href="#content">跳到正文</a><Header /><main id="content"><slot /></main><Footer /><MusicPlayer /></body>
 </html>

@@ -1,0 +1,77 @@
+<aside class="music-player" data-music-player aria-label="音乐播放器">
+  <div class="music-disc" aria-hidden="true"><span>GH</span></div>
+  <div class="music-info">
+    <div class="music-heading">
+      <div><strong>Goodbye Happiness</strong><span>宇多田光</span></div>
+      <button class="music-mute" type="button" aria-label="静音" title="静音"><span aria-hidden="true">♫</span></button>
+    </div>
+    <div class="music-timeline">
+      <span data-current>0:00</span>
+      <input data-progress type="range" min="0" max="100" step="0.1" value="0" aria-label="播放进度" />
+      <span data-duration>0:00</span>
+    </div>
+  </div>
+  <button class="music-toggle" type="button" aria-label="播放 Goodbye Happiness">
+    <span class="play-icon" aria-hidden="true">▶</span>
+    <span class="pause-icon" aria-hidden="true">Ⅱ</span>
+  </button>
+  <audio data-audio src="/audio/goodbye-happiness.mp3" preload="metadata"></audio>
+</aside>
+
+<script>
+  const player = document.querySelector<HTMLElement>('[data-music-player]');
+  const audio = player?.querySelector<HTMLAudioElement>('[data-audio]');
+  const toggle = player?.querySelector<HTMLButtonElement>('.music-toggle');
+  const mute = player?.querySelector<HTMLButtonElement>('.music-mute');
+  const progress = player?.querySelector<HTMLInputElement>('[data-progress]');
+  const current = player?.querySelector<HTMLElement>('[data-current]');
+  const duration = player?.querySelector<HTMLElement>('[data-duration]');
+
+  const formatTime = (seconds: number) => {
+    if (!Number.isFinite(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
+  };
+
+  const updateButton = () => {
+    if (!player || !audio || !toggle) return;
+    const playing = !audio.paused;
+    player.classList.toggle('is-playing', playing);
+    toggle.setAttribute('aria-label', playing ? '暂停 Goodbye Happiness' : '播放 Goodbye Happiness');
+  };
+
+  toggle?.addEventListener('click', async () => {
+    if (!audio) return;
+    if (audio.paused) {
+      try { await audio.play(); } catch { /* Browser blocked playback. */ }
+    } else {
+      audio.pause();
+    }
+    updateButton();
+  });
+
+  mute?.addEventListener('click', () => {
+    if (!audio || !mute || !player) return;
+    audio.muted = !audio.muted;
+    player.classList.toggle('is-muted', audio.muted);
+    mute.setAttribute('aria-label', audio.muted ? '取消静音' : '静音');
+    mute.setAttribute('title', audio.muted ? '取消静音' : '静音');
+  });
+
+  audio?.addEventListener('loadedmetadata', () => {
+    if (duration) duration.textContent = formatTime(audio.duration);
+  });
+
+  audio?.addEventListener('timeupdate', () => {
+    if (current) current.textContent = formatTime(audio.currentTime);
+    if (progress && audio.duration) progress.value = String((audio.currentTime / audio.duration) * 100);
+  });
+
+  progress?.addEventListener('input', () => {
+    if (audio?.duration) audio.currentTime = (Number(progress.value) / 100) * audio.duration;
+  });
+
+  audio?.addEventListener('play', updateButton);
+  audio?.addEventListener('pause', updateButton);
+  audio?.addEventListener('ended', updateButton);
+</script>
