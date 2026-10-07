@@ -1,14 +1,10 @@
 <div class="route-transition" data-route-transition aria-hidden="true">
-  <div class="route-transition-panel"></div>
   <div class="route-boot-copy">
-    <span>AMELIFE SYSTEM</span>
-    <strong>INITIALIZING</strong>
-    <i></i>
+    <strong>AMEYUR1</strong>
   </div>
 </div>
 
 <div class="reading-rail" aria-hidden="true"><span data-reading-progress></span><i>READ / SYNC</i></div>
-<div class="pointer-signal" data-pointer-signal aria-hidden="true"><i></i></div>
 <div class="screen-hud" aria-hidden="true">
   <span class="hud-corner hud-tl"></span><span class="hud-corner hud-tr"></span>
   <span class="hud-corner hud-bl"></span><span class="hud-corner hud-br"></span>
@@ -18,7 +14,6 @@
 <script>
   const root = document.documentElement;
   const transition = document.querySelector<HTMLElement>('[data-route-transition]');
-  const pointer = document.querySelector<HTMLElement>('[data-pointer-signal]');
   const progress = document.querySelector<HTMLElement>('[data-reading-progress]');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -53,16 +48,6 @@
   addEventListener('scroll', updateProgress, { passive: true });
 
   if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
-    let pointerFrame = 0;
-    addEventListener('pointermove', (event) => {
-      cancelAnimationFrame(pointerFrame);
-      pointerFrame = requestAnimationFrame(() => {
-        pointer?.style.setProperty('--pointer-x', `${event.clientX}px`);
-        pointer?.style.setProperty('--pointer-y', `${event.clientY}px`);
-        pointer?.classList.add('is-active');
-      });
-    }, { passive: true });
-
     document.querySelectorAll<HTMLElement>('.post-card, .group-card, .project-card').forEach((card) => {
       card.addEventListener('pointermove', (event) => {
         const rect = card.getBoundingClientRect();

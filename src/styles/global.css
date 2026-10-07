@@ -40,3 +40,18 @@
 @keyframes route-reveal{to{clip-path:polygon(115% 0,115% 0,100% 100%,100% 100%)}}@keyframes route-cover{from{clip-path:polygon(0 0,0 0,-15% 100%,-15% 100%)}to{clip-path:polygon(0 0,115% 0,100% 100%,-15% 100%)}}@keyframes boot-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes active-pulse{50%{opacity:.25;transform:translateY(2px)}}
 @media(max-width:900px){.screen-hud,.pointer-signal{display:none}.reading-rail{right:3px}.card-grid .post-card:nth-child(2){margin-top:0;margin-bottom:0}.post-card.is-tracking,.group-card.is-tracking,.project-card.is-tracking{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}.route-transition{display:none}.effects-ready .reveal-target{opacity:1;transform:none;filter:none}.pointer-signal{display:none}}
+
+/* streamlined transition and chapter readability */
+.chapter-art{background-position:var(--chapter-position,center)}
+.chapter-play{right:max(82px,9%);min-width:218px;padding-inline:34px;justify-content:center;white-space:nowrap}
+.route-transition{color:#f7f7f4;background:#101418;clip-path:none;opacity:1;animation:route-fade-out .52s .2s ease forwards}
+.route-transition::before,.route-transition::after{display:none}
+.route-boot-copy{display:grid;place-items:center}
+.route-boot-copy strong{margin:0;font:900 clamp(2.4rem,8vw,7rem)/1 Arial,sans-serif;letter-spacing:.2em;text-indent:.2em}
+.route-transition.is-repeat{animation:route-fade-out .34s 0s ease forwards}
+.route-transition.is-repeat .route-boot-copy,.route-transition.is-leaving .route-boot-copy{display:grid}
+.route-transition.is-leaving{clip-path:none;opacity:0;animation:route-fade-in .28s ease forwards!important}
+.pointer-signal{display:none!important}
+@keyframes route-fade-out{to{opacity:0;visibility:hidden}}
+@keyframes route-fade-in{from{opacity:0}to{opacity:1}}
+@media(max-width:600px){.chapter-play{right:46px;min-width:176px;padding-inline:24px}}
