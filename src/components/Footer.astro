@@ -1,4 +1,4 @@
 ---
 import { siteConfig } from '../config';
 ---
-<footer class="site-footer"><div class="shell footer-grid"><div><strong>{siteConfig.siteName}</strong><p>{siteConfig.footer}</p></div><div class="socials">{siteConfig.socialLinks.map((link) => <a href={link.href}>{link.label}</a>)}</div><small>© {new Date().getFullYear()} {siteConfig.siteName}. Built with Astro.</small></div></footer>
+<footer class="site-footer"><div class="shell footer-grid"><div class="footer-signal" aria-hidden="true"><span></span><span></span><span></span><span></span></div><div><strong>{siteConfig.siteName}</strong><p>{siteConfig.footer}</p></div><div class="socials">{siteConfig.socialLinks.map((link, index) => <a href={link.href}><span>{String(index + 1).padStart(2, '0')}</span>{link.label}</a>)}</div><small>© {new Date().getFullYear()} {siteConfig.siteName} / ASTRO SYSTEM / ALL DATA SYNCED</small></div></footer>

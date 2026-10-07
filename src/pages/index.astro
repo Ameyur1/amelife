@@ -1,13 +1,40 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro'; import PostCard from '../components/PostCard.astro';
-import { siteConfig } from '../config'; import { projects } from '../data/projects'; import { sortPosts } from '../utils/posts';
-const posts = sortPosts(await getCollection('blog')); const latest = posts.slice(0, 3); const featured = posts.filter((p) => p.data.featured).slice(0, 2);
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+import { getPostCover, sortPosts } from '../utils/posts';
+
+const posts = sortPosts(await getCollection('blog'));
+const latest = posts[0];
 const bgStyle = `--hero-light:url(${siteConfig.backgrounds.light});--hero-dark:url(${siteConfig.backgrounds.dark});--overlay-light:${siteConfig.backgrounds.overlayLight};--overlay-dark:${siteConfig.backgrounds.overlayDark}`;
+const chapters = [
+  { index: '01', label: '文章', sub: 'WRITING ARCHIVE', href: '/posts/', image: getPostCover(latest), detail: latest.data.title, meta: `${posts.length} NOTES`, action: '开始阅读' },
+  { index: '02', label: '分类', sub: 'THREE SECTORS', href: '/categories/', image: '/images/posts/category-essay.jpg', detail: '学术 / 杂谈 / 日常', meta: '03 SECTORS', action: '进入分类' },
+  { index: '03', label: '标签', sub: 'SIGNAL MAP', href: '/tags/', image: '/images/posts/category-academic.jpg', detail: '沿关键词寻找内容', meta: 'TAG MATRIX', action: '查看标签' },
+  { index: '04', label: '归档', sub: 'TIME LINE', href: '/archive/', image: '/images/posts/category-daily.jpeg', detail: '按时间回看记录', meta: '2026 / NOW', action: '打开归档' },
+  { index: '05', label: '项目', sub: 'SIDE QUESTS', href: '/projects/', image: '/images/projects/project-map.svg', detail: '正在做的小东西', meta: '03 PROJECTS', action: '查看项目' },
+  { index: '06', label: '关于', sub: 'PLAYER DATA', href: '/about/', image: siteConfig.avatar, detail: 'Ameyur1 / BUPT', meta: 'PROFILE', action: '读取资料' },
+];
 ---
 <BaseLayout>
-  <section class="hero" style={bgStyle}><div class="shell hero-inner"><img class="avatar" src={siteConfig.avatar} alt="Amelife 示例头像" /><p class="kicker light">PERSONAL FIELD NOTES</p><h1>{siteConfig.siteName}</h1><p>{siteConfig.tagline}</p><div class="hero-actions"><a class="button primary" href="/posts/">开始阅读</a><a class="button ghost" href="/about/">认识这里</a></div><div class="hero-socials">{siteConfig.socialLinks.map((link) => <a href={link.href}>{link.label}</a>)}</div></div></section>
-  <section class="section shell"><div class="section-heading"><div><p class="kicker">RECENT NOTES</p><h2>最近写下的</h2></div><a href="/posts/">全部文章</a></div><div class="card-grid">{latest.map((post) => <PostCard post={post} />)}</div></section>
-  <section class="section soft"><div class="shell"><div class="section-heading"><div><p class="kicker">FEATURED</p><h2>值得先读</h2></div></div><div class="featured-grid">{featured.map((post) => <PostCard post={post} compact />)}</div></div></section>
-  <section class="section shell"><div class="section-heading"><div><p class="kicker">SIDE PROJECTS</p><h2>正在做的事</h2></div><a href="/projects/">查看项目</a></div><div class="project-strip">{projects.slice(0, 3).map((project, i) => <a class="project-peek" href="/projects/"><span>0{i + 1}</span><div><h3>{project.name}</h3><p>{project.description}</p></div></a>)}</div></section>
+  <section class="chapter-screen" style={bgStyle} aria-label="网站板块选择">
+    <div class="chapter-topbar shell"><span>AMELIFE / CHAPTER SELECT</span><strong>{new Date().getFullYear()}</strong><i>DATA ONLINE</i></div>
+    <div class="chapter-deck" data-chapter-deck>
+      {chapters.map((chapter, index) => (
+        <a class:list={['chapter-card', index === 0 && 'is-selected']} href={chapter.href} data-chapter-card style={`--chapter-image:url('${chapter.image}')`} aria-label={`${chapter.label}：${chapter.detail}`}>
+          <span class="chapter-number">{chapter.index}</span>
+          <div class="chapter-art" aria-hidden="true"></div><div class="chapter-shade" aria-hidden="true"></div>
+          <div class="chapter-copy"><small>{chapter.sub}</small><h2>{chapter.label}</h2><p>{chapter.detail}</p></div>
+          <div class="chapter-stats"><span>{chapter.meta}</span><i></i><span>READY</span></div>
+          <span class="chapter-play"><b>▷</b>{chapter.action}</span>
+        </a>
+      ))}
+    </div>
+    <div class="chapter-footer shell"><div><span>06</span><small>TOTAL CHAPTERS</small></div><div><span>{String(posts.length).padStart(2, '0')}</span><small>RECORDS</small></div><p>移动光标选择板块 / 点击进入</p></div>
+  </section>
 </BaseLayout>
+<script>
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-chapter-card]')];
+  const select = (card: HTMLElement) => cards.forEach((item) => item.classList.toggle('is-selected', item === card));
+  cards.forEach((card) => { card.addEventListener('pointerenter', () => select(card)); card.addEventListener('focus', () => select(card)); });
+</script>

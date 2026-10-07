@@ -1,5 +1,33 @@
 ---
-import { getCollection } from 'astro:content'; import BaseLayout from '../../layouts/BaseLayout.astro'; import PageHeader from '../../components/PageHeader.astro'; import PostCard from '../../components/PostCard.astro'; import { sortPosts } from '../../utils/posts';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getPostCover, getPostCoverPosition, readingTime, sortPosts } from '../../utils/posts';
 const posts = sortPosts(await getCollection('blog'));
+const selected = posts[0];
 ---
-<BaseLayout title="文章" description="Amelife 的全部文章"><PageHeader eyebrow="WRITING" title="文章" description="技术、学习与生活，按写下它们的时间排列。" /><section class="shell section no-top"><div class="list-stack">{posts.map((post) => <PostCard post={post} />)}</div></section></BaseLayout>
+<BaseLayout title="文章" description="Amelife 的全部文章">
+  <section class="track-screen shell" data-track-screen>
+    <header class="track-toolbar"><a href="/" aria-label="返回首页">←</a><div><small>ARTICLE SELECT</small><strong>文章数据库</strong></div><span>排序 / 最新</span><i>{String(posts.length).padStart(2, '0')} TRACKS</i></header>
+    <div class="track-interface">
+      <div class="track-list" role="listbox" aria-label="文章列表">
+        {posts.map((post, index) => (
+          <button class:list={['track-row', index === 0 && 'is-selected']} type="button" role="option" aria-selected={index === 0 ? 'true' : 'false'} data-track-row data-title={post.data.title} data-description={post.data.description} data-category={post.data.category} data-date={formatDate(post.data.date)} data-cover={getPostCover(post)} data-position={getPostCoverPosition(post)} data-reading={`${readingTime(post.body)} MIN`} data-tags={post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')} data-href={`/posts/${post.id}/`}>
+            <span class="track-index">{String(index + 1).padStart(2, '0')}</span><span class="track-row-copy"><strong>{post.data.title}</strong><small>{post.data.category} / {formatDate(post.data.date)}</small></span><span class="track-level">{readingTime(post.body)}</span>
+          </button>
+        ))}
+      </div>
+      <article class="track-preview">
+        <div class="track-cover-frame"><img data-preview-cover src={getPostCover(selected)} alt="" style={`object-position:${getPostCoverPosition(selected)}`} /><span>AMELIFE RECORD</span></div>
+        <div class="track-rating"><span>EZ<br /><b>1</b></span><span class="active">HD<br /><b data-preview-level>{readingTime(selected.body)}</b></span><span>IN<br /><b>12</b></span><span>AT<br /><b>14</b></span><strong>NOTE</strong></div>
+        <div class="track-detail"><p data-preview-category>{selected.data.category} / {formatDate(selected.data.date)}</p><h1 data-preview-title>{selected.data.title}</h1><p data-preview-description>{selected.data.description}</p><div><span data-preview-reading>{readingTime(selected.body)} MIN</span><span data-preview-tags>{selected.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')}</span></div></div>
+        <a class="track-read" data-preview-link href={`/posts/${selected.id}/`}><span>▷</span><strong>READ</strong></a>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+<script>
+  const rows = [...document.querySelectorAll<HTMLButtonElement>('[data-track-row]')];
+  const cover = document.querySelector<HTMLImageElement>('[data-preview-cover]'); const title = document.querySelector<HTMLElement>('[data-preview-title]'); const description = document.querySelector<HTMLElement>('[data-preview-description]'); const category = document.querySelector<HTMLElement>('[data-preview-category]'); const reading = document.querySelector<HTMLElement>('[data-preview-reading]'); const level = document.querySelector<HTMLElement>('[data-preview-level]'); const tags = document.querySelector<HTMLElement>('[data-preview-tags]'); const link = document.querySelector<HTMLAnchorElement>('[data-preview-link]');
+  const select = (row: HTMLButtonElement) => { rows.forEach((item) => { item.classList.toggle('is-selected', item === row); item.setAttribute('aria-selected', String(item === row)); }); if (cover) { cover.src = row.dataset.cover ?? ''; cover.style.objectPosition = row.dataset.position ?? 'center'; } if (title) title.textContent = row.dataset.title ?? ''; if (description) description.textContent = row.dataset.description ?? ''; if (category) category.textContent = `${row.dataset.category ?? ''} / ${row.dataset.date ?? ''}`; if (reading) reading.textContent = row.dataset.reading ?? ''; if (level) level.textContent = (row.dataset.reading ?? '0').replace(' MIN', ''); if (tags) tags.textContent = row.dataset.tags ?? ''; if (link) link.href = row.dataset.href ?? '#'; };
+  rows.forEach((row) => { row.addEventListener('click', () => select(row)); row.addEventListener('pointerenter', () => select(row)); row.addEventListener('dblclick', () => { if (row.dataset.href) location.href = row.dataset.href; }); });
+</script>

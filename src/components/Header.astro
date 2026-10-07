@@ -4,9 +4,10 @@ const path = Astro.url.pathname;
 ---
 <header class="site-header">
   <div class="shell nav-wrap">
-    <a class="brand" href="/" aria-label={`${siteConfig.siteName} 首页`}><span class="brand-mark">A</span><span>{siteConfig.siteName}</span></a>
+    <a class="brand" href="/" aria-label={`${siteConfig.siteName} 首页`}><span class="brand-mark">A</span><span class="brand-copy"><strong>{siteConfig.siteName}</strong><small>PERSONAL TERMINAL</small></span></a>
     <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">打开导航</span>☰</button>
-    <nav id="site-nav" aria-label="主导航">{siteConfig.navigation.map((item) => <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>)}</nav>
+    <nav id="site-nav" aria-label="主导航">{siteConfig.navigation.map((item, index) => <a href={item.href} aria-current={path === item.href ? 'page' : undefined}><span>{String(index + 1).padStart(2, '0')}</span>{item.label}</a>)}</nav>
+    <span class="system-state" aria-hidden="true"><i></i>ONLINE</span>
     <a class="search-button" href="/search/" aria-label="搜索文章" title="搜索文章">⌕</a>
     <button class="theme-button" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
   </div>

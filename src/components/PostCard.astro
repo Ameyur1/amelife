@@ -8,5 +8,5 @@ const coverAlt = post.data.coverAlt ?? (post.data.cover ? `${post.data.title} �
 ---
 <article class:list={['post-card', compact && 'compact']}>
   {!compact && <a class="post-cover" href={`/posts/${post.id}/`}><img src={cover} alt={coverAlt} loading="lazy" style={`object-position: ${coverPosition};`} /></a>}
-  <div class="post-card-body"><div class="eyebrow"><span>{post.data.category}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></div><h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><div class="post-meta"><span>{readingTime(post.body)} 分钟阅读</span><span>{post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')}</span></div></div>
+  <div class="post-card-body"><div class="eyebrow"><span>{post.data.category}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></div><h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3><p>{post.data.description}</p><div class="post-meta"><span>{readingTime(post.body)} MIN READ</span><span>{post.data.tags.slice(0, 3).map((tag) => `#${tag}`).join('  ')}</span></div><a class="card-arrow" href={`/posts/${post.id}/`} aria-label={`阅读 ${post.data.title}`}>↗</a></div>
 </article>

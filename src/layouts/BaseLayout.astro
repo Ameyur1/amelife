@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MusicPlayer from '../components/MusicPlayer.astro';
+import InterfaceEffects from '../components/InterfaceEffects.astro';
 import { siteConfig } from '../config';
 import '../styles/global.css';
 import '../styles/post-cards.css';
@@ -24,8 +25,8 @@ const socialImage = image ? new URL(image, siteConfig.siteUrl) : undefined;
     {socialImage && <meta property="og:image" content={socialImage} />}
     <title>{fullTitle}</title>
     <script is:inline>
-      (() => { const saved = localStorage.getItem('amelife-theme'); const system = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : system; })();
+      (() => { const saved = localStorage.getItem('amelife-theme'); document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : 'dark'; })();
     </script>
   </head>
-  <body><a class="skip-link" href="#content">跳到正文</a><Header /><main id="content"><slot /></main><Footer /><MusicPlayer /></body>
+  <body><a class="skip-link" href="#content">跳到正文</a><Header /><main id="content"><slot /></main><Footer /><MusicPlayer /><InterfaceEffects /></body>
 </html>
