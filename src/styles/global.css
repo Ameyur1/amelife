@@ -75,3 +75,14 @@
 .route-boot-copy strong{transform:skewX(7deg);text-shadow:-3px 0 0 color-mix(in srgb,var(--accent-2) 48%,transparent),3px 0 0 color-mix(in srgb,var(--accent) 48%,transparent)}
 @media(max-width:900px){.chapter-deck{padding-inline:24px}.chapter-card,.chapter-card.is-selected{transform:skewX(-5deg)}.chapter-art,.chapter-card.is-selected .chapter-art,.chapter-copy,.chapter-stats,.chapter-play,.chapter-number{transform:skewX(5deg)}.chapter-card:not(.is-selected) .chapter-copy{transform:translateX(-50%) skewX(5deg)}}
 @media(max-width:600px){.chapter-deck{gap:10px;padding-inline:18px}.route-boot-copy{padding:28px 30px}.route-transition::after{font-size:.45rem;letter-spacing:.12em}.route-boot-copy strong{font-size:2.3rem}}
+
+/* preserve the whole portrait: collapsed is only a compressed, blurred version */
+.chapter-deck{justify-content:center}
+.chapter-card{flex:0 0 clamp(92px,7vw,132px)}
+.chapter-card.is-selected{flex:0 0 clamp(343px,45.5vh,455px)}
+.chapter-art,.chapter-card.is-selected .chapter-art{background-image:none;background:#090d11;transform:skewX(7deg);filter:none}
+.chapter-art::after{content:'';position:absolute;inset:0;background-image:var(--chapter-image);background-repeat:no-repeat;background-position:center;background-size:100% 100%;transform:scale(1.015);transform-origin:center;transition:filter .45s ease,transform .55s cubic-bezier(.18,.8,.2,1)}
+.chapter-card:not(.is-selected) .chapter-art{transform:skewX(7deg);filter:none}
+.chapter-card:not(.is-selected) .chapter-art::after{filter:blur(12px) brightness(.58) saturate(.55);transform:scale(1.14)}
+.chapter-card.is-selected .chapter-art::after{filter:none;transform:scale(1.015)}
+@media(max-width:900px){.chapter-card{flex-basis:92px}.chapter-card.is-selected{flex-basis:min(70vw,400px)}.chapter-art,.chapter-card.is-selected .chapter-art,.chapter-card:not(.is-selected) .chapter-art{transform:skewX(5deg)}}
