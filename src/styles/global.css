@@ -55,3 +55,23 @@
 @keyframes route-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes route-fade-in{from{opacity:0}to{opacity:1}}
 @media(max-width:600px){.chapter-play{right:46px;min-width:176px;padding-inline:24px}}
+
+/* parallel chapter selector: one sharp panel, compressed blurred neighbours */
+.chapter-deck{gap:14px;padding-inline:46px}
+.chapter-card,.chapter-card.is-selected{clip-path:none;transform:skewX(-7deg)}
+.chapter-art,.chapter-card.is-selected .chapter-art{background-position:center 10%;background-size:cover;transform:scale(1.04) skewX(7deg);filter:none}
+.chapter-card:not(.is-selected) .chapter-art{background-position:center;background-size:100% 100%;transform:scale(1.08) skewX(7deg);filter:blur(5px) saturate(.55)}
+.chapter-copy,.chapter-stats,.chapter-play{transform:skewX(7deg)}
+.chapter-card:not(.is-selected) .chapter-copy{transform:translateX(-50%) skewX(7deg)}
+.chapter-number{transform:skewX(7deg)}
+
+/* AMEYUR1 terminal transition */
+.route-transition{overflow:hidden;background:#0d1217}
+.route-transition::before{display:block;content:'';position:absolute;left:-10%;top:50%;width:120%;height:2px;background:linear-gradient(90deg,transparent 5%,var(--accent) 24% 48%,var(--accent-2) 52% 76%,transparent 95%);box-shadow:0 0 22px color-mix(in srgb,var(--accent-2) 45%,transparent);transform:rotate(-5deg)}
+.route-transition::after{display:block;content:'AMELIFE  /  PERSONAL TERMINAL  /  DATA SYNC';position:absolute;left:50%;top:calc(50% + 92px);color:rgba(255,255,255,.34);font:700 .58rem monospace;letter-spacing:.26em;white-space:nowrap;transform:translateX(-50%)}
+.route-boot-copy{position:relative;padding:34px 56px;background:#0d1217;border-left:3px solid var(--accent);border-right:3px solid var(--accent-2);transform:skewX(-7deg)}
+.route-boot-copy::before{content:'SYSTEM / TRANSITION';position:absolute;left:14px;top:10px;color:var(--accent-2);font:700 .5rem monospace;letter-spacing:.2em}
+.route-boot-copy::after{content:'READY';position:absolute;right:14px;bottom:10px;color:var(--accent);font:700 .5rem monospace;letter-spacing:.2em}
+.route-boot-copy strong{transform:skewX(7deg);text-shadow:-3px 0 0 color-mix(in srgb,var(--accent-2) 48%,transparent),3px 0 0 color-mix(in srgb,var(--accent) 48%,transparent)}
+@media(max-width:900px){.chapter-deck{padding-inline:24px}.chapter-card,.chapter-card.is-selected{transform:skewX(-5deg)}.chapter-art,.chapter-card.is-selected .chapter-art,.chapter-copy,.chapter-stats,.chapter-play,.chapter-number{transform:skewX(5deg)}.chapter-card:not(.is-selected) .chapter-copy{transform:translateX(-50%) skewX(5deg)}}
+@media(max-width:600px){.chapter-deck{gap:10px;padding-inline:18px}.route-boot-copy{padding:28px 30px}.route-transition::after{font-size:.45rem;letter-spacing:.12em}.route-boot-copy strong{font-size:2.3rem}}

@@ -8,12 +8,12 @@ const posts = sortPosts(await getCollection('blog'));
 const latest = posts[0];
 const bgStyle = `--hero-light:url(${siteConfig.backgrounds.light});--hero-dark:url(${siteConfig.backgrounds.dark});--overlay-light:${siteConfig.backgrounds.overlayLight};--overlay-dark:${siteConfig.backgrounds.overlayDark}`;
 const chapters = [
-  { index: '01', label: '文章', sub: 'WRITING ARCHIVE', href: '/posts/', image: '/images/chapters/articles.jpeg', position: 'center 8%', detail: latest.data.title, meta: `${posts.length} NOTES`, action: '开始阅读' },
-  { index: '02', label: '分类', sub: 'THREE SECTORS', href: '/categories/', image: '/images/chapters/categories.jpeg', position: 'center 7%', detail: '学术 / 杂谈 / 日常', meta: '03 SECTORS', action: '进入分类' },
-  { index: '03', label: '标签', sub: 'SIGNAL MAP', href: '/tags/', image: '/images/chapters/tags.jpeg', position: 'center 8%', detail: '沿关键词寻找内容', meta: 'TAG MATRIX', action: '查看标签' },
-  { index: '04', label: '归档', sub: 'TIME LINE', href: '/archive/', image: '/images/chapters/archive.jpeg', position: 'center 14%', detail: '按时间回看记录', meta: '2026 / NOW', action: '打开归档' },
-  { index: '05', label: '项目', sub: 'SIDE QUESTS', href: '/projects/', image: '/images/chapters/projects.jpeg', position: 'center 9%', detail: '正在做的小东西', meta: '03 PROJECTS', action: '查看项目' },
-  { index: '06', label: '关于', sub: 'PLAYER DATA', href: '/about/', image: '/images/chapters/about.jpeg', position: 'center 7%', detail: 'Ameyur1 / BUPT', meta: 'PROFILE', action: '读取资料' },
+  { index: '01', label: '文章', sub: 'WRITING ARCHIVE', href: '/posts/', image: '/images/chapters/articles.jpeg', detail: latest.data.title, meta: `${posts.length} NOTES`, action: '开始阅读' },
+  { index: '02', label: '分类', sub: 'THREE SECTORS', href: '/categories/', image: '/images/chapters/categories.jpeg', detail: '学术 / 杂谈 / 日常', meta: '03 SECTORS', action: '进入分类' },
+  { index: '03', label: '标签', sub: 'SIGNAL MAP', href: '/tags/', image: '/images/chapters/tags.jpeg', detail: '沿关键词寻找内容', meta: 'TAG MATRIX', action: '查看标签' },
+  { index: '04', label: '归档', sub: 'TIME LINE', href: '/archive/', image: '/images/chapters/archive.jpeg', detail: '按时间回看记录', meta: '2026 / NOW', action: '打开归档' },
+  { index: '05', label: '项目', sub: 'SIDE QUESTS', href: '/projects/', image: '/images/chapters/projects.jpeg', detail: '正在做的小东西', meta: '03 PROJECTS', action: '查看项目' },
+  { index: '06', label: '关于', sub: 'PLAYER DATA', href: '/about/', image: '/images/chapters/about.jpeg', detail: 'Ameyur1 / BUPT', meta: 'PROFILE', action: '读取资料' },
 ];
 ---
 <BaseLayout>
@@ -21,7 +21,7 @@ const chapters = [
     <div class="chapter-topbar shell"><span>AMELIFE / CHAPTER SELECT</span><strong>{new Date().getFullYear()}</strong><i>DATA ONLINE</i></div>
     <div class="chapter-deck" data-chapter-deck>
       {chapters.map((chapter, index) => (
-        <a class:list={['chapter-card', index === 0 && 'is-selected']} href={chapter.href} data-chapter-card style={`--chapter-image:url('${chapter.image}');--chapter-position:${chapter.position}`} aria-label={`${chapter.label}：${chapter.detail}`}>
+        <a class:list={['chapter-card', index === 0 && 'is-selected']} href={chapter.href} data-chapter-card style={`--chapter-image:url('${chapter.image}')`} aria-label={`${chapter.label}：${chapter.detail}`}>
           <span class="chapter-number">{chapter.index}</span>
           <div class="chapter-art" aria-hidden="true"></div><div class="chapter-shade" aria-hidden="true"></div>
           <div class="chapter-copy"><small>{chapter.sub}</small><h2>{chapter.label}</h2><p>{chapter.detail}</p></div>
