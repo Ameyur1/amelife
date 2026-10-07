@@ -91,3 +91,6 @@
 .chapter-card.is-selected{flex-basis:clamp(322px,42vh,420px)}
 .chapter-art,.chapter-card.is-selected .chapter-art,.chapter-card:not(.is-selected) .chapter-art{transform:none}
 @media(max-width:900px){.chapter-card.is-selected{flex-basis:min(66vw,370px)}.chapter-art,.chapter-card.is-selected .chapter-art,.chapter-card:not(.is-selected) .chapter-art{transform:none}}
+
+/* keep article artwork clean */
+.track-cover-frame::after{display:none}
