@@ -2,14 +2,14 @@ import type { CollectionEntry } from 'astro:content';
 
 export type BlogPost = CollectionEntry<'blog'>;
 const categoryCovers: Record<BlogPost['data']['category'], string> = {
-  学术: '/images/posts/category-academic.jpg',
-  杂谈: '/images/posts/category-essay.jpg',
-  日常: '/images/posts/category-daily.jpeg',
+  学术: '/images/categories/academic.jpeg',
+  杂谈: '/images/categories/essay.jpeg',
+  日常: '/images/categories/daily.jpeg',
 };
 const categoryCoverPositions: Record<BlogPost['data']['category'], string> = {
-  学术: 'center 25%',
-  杂谈: 'center 42%',
-  日常: 'center 24%',
+  学术: 'center 15%',
+  杂谈: 'center 18%',
+  日常: 'center 18%',
 };
 
 export const getPostCover = (post: BlogPost) => post.data.cover ?? categoryCovers[post.data.category];
