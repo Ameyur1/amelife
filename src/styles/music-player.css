@@ -3,3 +3,7 @@
 @media(max-width:880px){.music-main{grid-template-columns:minmax(180px,1fr) minmax(250px,1.2fr)}.music-controls{display:none}.music-shell{grid-template-columns:48px minmax(0,1fr)}.music-cover{width:48px;height:48px}.music-track-list{grid-template-columns:1fr}body{padding-bottom:64px}}
 @media(max-width:600px){.music-player{font-size:13px}.music-main{display:block}.music-timeline{margin-top:5px}.music-heading small,.music-album{display:none}.music-shell{grid-template-columns:44px minmax(0,1fr);gap:10px}.music-cover{width:44px;height:44px}.music-queue-toggle{min-height:24px}.music-playlist{padding-inline:12px}body{padding-bottom:62px}}
 @media(prefers-reduced-motion:reduce){.music-equalizer i,.music-cover img,.music-playlist{animation:none!important;transition:none!important}}
+
+/* Keep the dock edge clean: no glow or shadow bleeding into page content. */
+.music-player{box-shadow:none}
+.music-player-glow{display:none}
