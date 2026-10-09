@@ -4,7 +4,7 @@ export const siteConfig = {
   description: '记录生活、学习、技术与持续发生的小事。',
   tagline: '隱約雷鳴，陰霾天空',
   siteUrl: 'https://amelife.pages.dev/', // 占位值：部署后改为真实网址
-  avatar: '/images/avatars/avatar-placeholder.png',
+  avatar: '/images/avatars/ameyuri-avatar.jpg',
   backgrounds: {
     light: '/images/backgrounds/amelife-dawn.png',
     dark: '/images/backgrounds/amelife-dawn.png',
