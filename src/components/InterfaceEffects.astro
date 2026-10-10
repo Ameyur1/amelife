@@ -12,7 +12,7 @@
 
   root.classList.add('effects-ready');
 
-  const revealTargets = document.querySelectorAll<HTMLElement>('.section, .page-header, .post-card, .group-card, .project-card, .archive-year, .about-intro, .article-header, .article-layout');
+  const revealTargets = document.querySelectorAll<HTMLElement>('.section, .page-header, .post-card, .group-card, .project-card, .archive-year, .about-intro, .article-header');
   revealTargets.forEach((element, index) => {
     element.classList.add('reveal-target');
     element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 65}ms`);
@@ -29,14 +29,20 @@
     revealTargets.forEach((element) => observer.observe(element));
   }
 
+  let progressFrame = 0;
   const updateProgress = () => {
+    progressFrame = 0;
     const max = document.documentElement.scrollHeight - innerHeight;
     const value = max > 0 ? Math.min(1, scrollY / max) : 0;
     progress?.style.setProperty('--reading', String(value));
     document.body.classList.toggle('has-scrolled', scrollY > 40);
   };
+  const scheduleProgress = () => {
+    if (!progressFrame) progressFrame = requestAnimationFrame(updateProgress);
+  };
   updateProgress();
-  addEventListener('scroll', updateProgress, { passive: true });
+  addEventListener('scroll', scheduleProgress, { passive: true });
+  addEventListener('resize', scheduleProgress, { passive: true });
 
   if (!reduceMotion && matchMedia('(pointer: fine)').matches) {
     document.querySelectorAll<HTMLElement>('.post-card, .group-card, .project-card').forEach((card) => {
