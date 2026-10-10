@@ -7,9 +7,8 @@ const firstTrack = musicPlaylist[0];
   class="music-player"
   data-music-player
   aria-label="音乐播放器"
-  style={`--music-accent: ${firstTrack.accent}; --music-glow: ${firstTrack.glow};`}
+  style={`--music-accent: ${firstTrack.accent};`}
 >
-  <div class="music-player-glow" aria-hidden="true"></div>
   <div class="music-dock">
     <div class="music-brand" aria-hidden="true"><strong>AMELIFE</strong><span>PERSONAL RADIO</span></div>
     <div class="music-shell">
@@ -68,7 +67,6 @@ const firstTrack = musicPlaylist[0];
           data-artist={track.artist}
           data-album={track.album}
           data-accent={track.accent}
-          data-glow={track.glow}
         >
           <span class="music-track-number">{String(index + 1).padStart(2, '0')}</span>
           <img src={track.cover} alt="" loading="lazy" />
@@ -131,7 +129,6 @@ const firstTrack = musicPlaylist[0];
     }
     if (count) count.textContent = `${currentIndex + 1} / ${tracks.length}`;
     player.style.setProperty('--music-accent', track.dataset.accent ?? '#f3a45f');
-    player.style.setProperty('--music-glow', track.dataset.glow ?? '#214e68');
     tracks.forEach((item, itemIndex) => item.classList.toggle('is-active', itemIndex === currentIndex));
     if (current) current.textContent = '0:00';
     if (duration) duration.textContent = '0:00';

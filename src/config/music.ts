@@ -6,7 +6,6 @@ export interface MusicTrack {
   src: string;
   cover: string;
   accent: string;
-  glow: string;
 }
 
 // 后续添加歌曲时，只需把音频和封面放入 public 文件夹，
@@ -20,7 +19,6 @@ export const musicPlaylist: MusicTrack[] = [
     src: '/audio/goodbye-happiness.mp3',
     cover: '/images/music/goodbye-happiness.jpg',
     accent: '#d8b98a',
-    glow: '#6f593f',
   },
   {
     id: 'ahead-of-us',
@@ -30,6 +28,5 @@ export const musicPlaylist: MusicTrack[] = [
     src: '/audio/ahead-of-us.mp3',
     cover: '/images/music/ahead-of-us.jpeg',
     accent: '#9bcdf7',
-    glow: '#496f9e',
   },
 ];

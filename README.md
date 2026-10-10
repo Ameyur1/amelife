@@ -79,7 +79,7 @@ featured: false
 
 ### 修改头像
 
-替换 `public/images/avatars/avatar-placeholder.png`，或在 `src/config.ts` 修改 `avatar` 路径。建议使用正方形图片。
+当前头像为 `public/images/avatars/ameyuri-avatar.jpg`。更换时可覆盖该文件，或在 `src/config.ts` 修改 `avatar` 路径；建议使用正方形图片。
 
 ### 修改背景
 
@@ -105,6 +105,9 @@ featured: false
 public/images/
 ├── avatars/       # 头像
 ├── backgrounds/   # 首页背景
+├── categories/    # 分类默认封面
+├── chapters/      # 首页板块图片
+├── music/         # 播放器专辑封面
 ├── posts/         # 文章封面与正文图片
 └── projects/      # 项目图片
 ```
@@ -157,9 +160,9 @@ git push -u origin main
 - GitHub 首页链接：尚未指定用户名
 - `src/content/blog/` 中的三篇文章：示例内容
 - `src/data/projects.ts` 中的三个项目：示例项目
-- `public/images/avatars/avatar-placeholder.png`：生成的抽象示例头像
-- `public/images/backgrounds/amelife-dawn.png`：生成的示例背景
-- 文章封面和项目插图：示例素材
+- `public/images/avatars/ameyuri-avatar.jpg`：当前站点头像
+- `public/images/backgrounds/amelife-dawn.png`：当前首页背景
+- 分类、首页板块、文章封面和项目插图均集中存放在 `public/images/` 下的对应目录中
 
 ## 目录结构
 
