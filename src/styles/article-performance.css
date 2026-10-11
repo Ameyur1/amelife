@@ -1,0 +1,20 @@
+/* Article content must remain readable even if an old reveal script tags it. */
+.effects-ready .article-layout.reveal-target,
+.effects-ready .article-layout .prose.reveal-target {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+/* A book-length table of contents should not push the text below the viewport. */
+.article-layout .toc {
+  max-height: calc(100dvh - 190px);
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .article-layout .toc {
+    max-height: 40dvh;
+  }
+}

@@ -7,6 +7,7 @@ import { siteConfig } from '../config';
 import '../styles/global.css';
 import '../styles/post-cards.css';
 import '../styles/music-player.css';
+import '../styles/article-performance.css';
 interface Props { title?: string; description?: string; image?: string; article?: boolean }
 const { title, description = siteConfig.description, image, article = false } = Astro.props;
 const fullTitle = title ? `${title} · ${siteConfig.siteName}` : siteConfig.siteName;
