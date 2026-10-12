@@ -8,6 +8,7 @@ cover: "/images/posts/default.jpg"
 coverAlt: "文章封面说明"
 draft: false
 featured: false
+typora-root-url: ./..\..\..\public
 ---
 
 这篇文章记录了 Amelife 博客的日常发布方法。完成一次部署以后，以后发布新文章只需要：**新建文章、保存、提交并推送**。
