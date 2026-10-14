@@ -1,7 +1,7 @@
 ---
 title: "Amelife Bot 使用手册"
 description: "这份手册用于日常开机、订阅和排查推送。机器人运行在这台电脑上：电脑关机，或机器人与 NapCat 没有同时运行时，不会检查新内容。"
-date: 2026-10-114
+date: 2026-10-14
 category: "杂谈"
 tags: [ "bot"]
 draft: false
