@@ -1,162 +1,80 @@
 ---
 title: "Amelife 博客文章发布教程"
-description: "从新建 Markdown 文章到推送 GitHub，并由 Cloudflare 自动更新网站的完整步骤。"
+description: "使用可视化后台创建、预览和发布文章，并通过 GitHub 与 Cloudflare Pages 自动更新网站。"
 date: 2026-10-05
+updated: 2026-10-20
 category: "杂谈"
 tags: ["Amelife", "博客", "教程"]
 cover: "/images/posts/default.jpg"
-coverAlt: "文章封面说明"
+coverAlt: "Amelife 博客文章发布教程封面"
 draft: false
 featured: false
 typora-root-url: ./..\..\..\public
 ---
 
-这篇文章记录了 Amelife 博客的日常发布方法。完成一次部署以后，以后发布新文章只需要：**新建文章、保存、提交并推送**。
+Amelife 已经加入可视化文章管理后台。以后发布文章不必手动编写 Frontmatter，也不必在终端运行 Git 命令。后台会把文章和图片提交到 GitHub，再由 Cloudflare Pages 自动更新网站。
+
+后台入口：[https://amelife.pages.dev/admin/](https://amelife.pages.dev/admin/)
 
 ## 网站关机后还能访问吗
 
-可以。
+可以。网站运行在 Cloudflare Pages 上，不依赖自己的电脑。即使电脑关机，访客仍然可以正常访问。
 
-网站已经部署在 Cloudflare 的服务器上，不依赖自己的电脑运行。即使电脑关机，别人仍然可以通过公网地址访问网站。
+本地执行 `npm run dev` 启动的只是预览服务，关闭电脑或终端后会停止，但不会影响正式网站。
 
-只有使用下面命令启动的本地预览会随着电脑关闭而停止：
+## 一、登录文章后台
 
-```powershell
-npm run dev
-```
+打开后台入口，点击“使用 GitHub 登录”，再使用获准管理仓库的 GitHub 账号完成授权。
 
-本地预览只是写文章时检查效果用的，不是正式网站。
+后台页面对所有人都可以打开，但只有允许名单中、同时具有仓库写入权限的账号才能修改文章。登录令牌会过期，过期后重新登录即可。
 
-## 一、新建文章
+如果看到“后台登录尚未配置”的提示，说明 GitHub App 或 Cloudflare Secrets 尚未完成设置，需要先由网站管理员完成一次性配置。
 
-打开项目文件夹：
+## 二、新建文章
 
-```text
-C:\Users\Ameyuri\Desktop\Amelife\网站
-```
+登录后选择“文章（Markdown）”，再点击“新建文章”。一般文章都使用 Markdown；只有正文确实需要 JSX 或 Astro 组件时才选择“文章（MDX）”。
 
-进入文章目录：
+填写下面的内容：
 
-```text
-src\content\blog
-```
+- **标题**：文章页面和列表中显示的名称。
+- **文章简介**：显示在文章卡片、搜索结果和页面摘要中。
+- **发布日期**：默认是当天，也可以手动修改。
+- **分类**：只能选择“学术”“杂谈”或“日常”。
+- **标签**：输入一个标签后按回车，可以添加多个。
+- **草稿**：默认关闭。开启后文章仍会保存到 GitHub，但不会出现在网站上。
+- **精选**：默认关闭。开启后文章可以进入首页精选区域。
+- **自定义封面**：可选；留空时使用该分类的默认封面。
+- **正文**：使用 Markdown 编写，右侧可以实时预览。
 
-在这里新建一个以 `.md` 结尾的文件，例如：
+后台会自动生成类似下面的 Frontmatter：
 
-```text
-my-new-post.md
-```
-
-文件名建议使用小写英文和短横线，不要使用空格。例如：
-
-```text
-java-study-notes.md
-my-weekend.md
-website-update.md
-```
-
-也可以复制一篇已有文章，再修改文件名和内容。
-
-## 二、填写文章信息
-
-每篇文章开头都要填写文章信息。可以复制下面的模板：
-
-```md
+```yaml
 ---
 title: "文章标题"
 description: "用一两句话介绍这篇文章。"
-date: 2026-10-05
+date: 2026-10-20
 category: "日常"
-tags: ["随笔", "生活"]
+tags:
+  - 随笔
+  - 生活
 draft: false
 featured: false
 ---
-
-这里开始写正文。
-
-## 第一个小标题
-
-正文内容……
-
-## 第二个小标题
-
-继续写……
 ```
 
-各项含义：
+新文章文件名会由标题生成，发布日期以 Frontmatter 中的 `date` 为准。创建后修改标题不会主动更改文件名，因此已有文章链接不会因为改标题而失效。
 
-- `title`：文章标题。
-- `description`：文章简介，会显示在文章列表和搜索结果中。
-- `date`：发布日期，格式为“年-月-日”。
-- `category`：文章板块，只填写“学术”“杂谈”或“日常”。
-- `tags`：文章标签，可以填写多个。
-- `cover`：自定义封面图片路径；不填写时，会按照文章板块自动选择默认封面。
-- `coverAlt`：封面的文字说明，方便图片无法显示时识别内容。
-- `coverPosition`：封面裁切焦点，例如 `"center 25%"` 会让画面更偏向图片上方。
-- `draft: false`：公开发布文章。
-- `draft: true`：保存为草稿，网站不会显示。
-- `featured: true`：设为推荐文章。
-- `featured: false`：作为普通文章发布。
+## 三、编写 Markdown 正文
 
-## 三、自定义文章封面
+### 分段
 
-如果文章没有填写 `cover`，网站会自动使用对应板块的默认封面：
-
-- 学术：学术板块默认封面。
-- 杂谈：杂谈板块默认封面。
-- 日常：日常板块默认封面。
-
-如果想让某篇文章使用独立封面，再按下面的方法设置。已经设置的自定义封面不会被板块默认封面替换。
-
-把准备好的封面图片复制到：
-
-```text
-public\images\posts
-```
-
-图片建议使用横向的 `JPG`、`PNG` 或 `WebP` 文件，推荐尺寸为 `1600 × 900`。文件名建议使用英文，例如：
-
-```text
-my-new-post.jpg
-```
-
-然后在文章开头加入：
-
-```yaml
-cover: "/images/posts/my-new-post.jpg"
-coverAlt: "这张封面的内容说明"
-coverPosition: "center 25%"
-```
-
-封面会同时显示在文章列表卡片和文章正文顶部。如果没有填写 `cover`，网站会自动显示该文章所属板块的默认封面。
-
-竖图在横向封面框中会裁掉一部分上下内容。如果人物的脸偏上，可以把 `coverPosition` 设为 `"center 20%"` 到 `"center 30%"`；数值越小，显示区域越靠近图片顶部。横图一般不需要填写这一项。
-
-## 四、编写正文
-
-文章正文使用 Markdown 格式。
-
-### 正确分段
-
-Markdown 中只按一次回车，网站通常仍会把相邻文字视为同一段。两个段落之间需要保留一个完整的空行：
+两个段落之间保留一个空行：
 
 ```md
 这是第一段文字。
 
 这是第二段文字。
 ```
-
-不要使用 Tab、全角空格或连续空格来代替分段。
-
-### 正确插入图片
-
-图片放在 `public\images\posts` 后，文章中只填写从 `/images/posts/` 开始的网站路径，不要填写电脑上的 `C:\Users\...` 本地路径：
-
-```md
-![图片说明](/images/posts/photo.jpg)
-```
-
-为了避免路径解析问题，图片文件名推荐使用不带空格的英文，例如 `campus-view.jpg`。
 
 ### 标题
 
@@ -166,103 +84,117 @@ Markdown 中只按一次回车，网站通常仍会把相邻文字视为同一�
 ### 三级标题
 ```
 
-### 粗体和引用
+### 粗体、引用和列表
 
 ```md
 **这是粗体文字**
 
 > 这是一段引用内容。
-```
 
-### 列表
-
-```md
 - 第一项
 - 第二项
-- 第三项
 ```
 
-### 链接
-
-```md
-[链接文字](https://example.com)
-```
-
-### 代码
+### 链接和代码
 
 ````md
+[链接文字](https://example.com)
+
 ```java
 System.out.println("Hello, Amelife!");
 ```
 ````
 
-## 五、本地预览
+普通 Markdown 文章提供实时预览。MDX 可以保留 import、JSX 和组件代码，但后台不会执行这些组件，因此复杂 MDX 发布前仍建议在本地运行 `npm run dev` 检查。
 
-想在发布前检查文章效果，可以在项目终端运行：
+## 四、上传图片
 
-```powershell
-npm run dev
+在封面字段或 Markdown 编辑器中选择图片并上传。后台会把图片保存到仓库的：
+
+```text
+public/images/posts
 ```
 
-然后打开终端显示的本地网址。检查完毕后，在终端按 `Ctrl + C` 停止预览。
+正文中的公开路径会自动使用：
 
-这一步不是必须的，确认内容没有问题也可以直接发布。
+```md
+![图片说明](/images/posts/example.jpg)
+```
 
-## 六、发布文章
+图片建议使用 `JPG`、`PNG` 或 `WebP`。尽量使用简短、没有空格的文件名，并填写能说明画面内容的替代文字。
 
-保存文章后，打开 PowerShell，依次运行：
+自定义封面还可以填写：
+
+- `coverAlt`：图片内容说明。
+- `coverPosition`：封面裁切焦点，例如 `center 25%`。
+
+留空自定义封面时，网站会继续使用“学术”“杂谈”或“日常”对应的默认封面。
+
+## 五、发布文章
+
+完成编辑后点击“发布”或“立即发布”。后台会：
+
+1. 生成 YAML Frontmatter 和 Markdown 文件。
+2. 把文章及新上传的图片提交到 GitHub 的 `main` 分支。
+3. 触发现有的 Cloudflare Pages 构建。
+4. 构建成功后更新正式网站。
+
+GitHub 显示保存成功只代表内容已经提交。通常还需要等待一到三分钟，让 Cloudflare 完成构建；如果文章没有出现，应检查最新一次 Pages 部署是否成功。
+
+## 六、编辑、草稿与删除
+
+### 编辑已有文章
+
+从文章列表打开内容，修改后再次发布即可。后台会更新原来的 Markdown 文件，不会主动修改文章路径。
+
+### 保存草稿
+
+打开“草稿（网站隐藏）”后发布，会写入 `draft: true`。下一次构建完成后，这篇文章不会生成公开页面，也不会出现在首页、文章列表、分类、标签、搜索或 RSS 中。
+
+草稿只是网站显示规则，不是保密功能。仓库是公开的，因此不要在草稿里保存密码、令牌或私人资料。
+
+### 删除文章
+
+打开文章后选择删除并确认。Cloudflare 完成下一次部署后，文章页面会返回 404。误删时可以从 GitHub 提交历史恢复文件。
+
+## 七、仍然可以手动发布
+
+可视化后台不会限制原来的工作方式。需要批量修改、编写复杂 MDX 或在本地检查完整页面时，仍可直接编辑：
+
+```text
+C:\Users\Ameyuri\Desktop\Amelife\网站\src\content\blog
+```
+
+发布前运行：
 
 ```powershell
-$env:Path += ";C:\Users\Ameyuri\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\git\cmd"
-Set-Location -LiteralPath "C:\Users\Ameyuri\Desktop\Amelife\网站"
-$env:HTTPS_PROXY = "http://127.0.0.1:7890"
-git add .
+npm run build
+```
+
+确认构建成功后，只提交本次需要的文件：
+
+```powershell
+git add src/content/blog/文章文件.md public/images/posts/相关图片.jpg
 git commit -m "Add new post"
-git push
+git push origin main
 ```
 
-如果第一行运行后没有任何提示，这是正常现象。
-
-最后看到类似下面的内容，就说明文章已经成功上传到 GitHub：
-
-```text
-main -> main
-```
-
-如果看到：
-
-```text
-Everything up-to-date
-```
-
-表示没有新的修改需要上传。请检查文章是否已经保存，以及是否在正确的项目目录中。
-
-![图片说明](/images/posts/Snipaste_2026-10-05_13-37-40.png)
-
-
-
-## 七、等待网站更新
-
-推送成功后，Cloudflare 会自动获取 GitHub 上的新内容并重新构建网站，不需要再次手动连接仓库。
-
-一般等待一到三分钟，然后刷新正式网站即可看到新文章。如果暂时没有出现，可以进入 Cloudflare Pages 查看最新一次部署是否完成。
+不要习惯性运行 `git add .`，这样可以避免把临时文件或无关修改一起提交。开始本地编辑前先执行 `git pull --ff-only`，取回后台最新发布的内容，减少冲突。
 
 ## 日常发布流程
 
-以后每次发文章，只需要记住下面这条流程：
-
 ```text
-新建或修改 .md 文章
-        ↓
-保存文件
-        ↓
-git add .
-        ↓
-git commit
-        ↓
-git push
-        ↓
-等待 Cloudflare 自动更新
+打开 /admin/
+      ↓
+登录 GitHub
+      ↓
+新建或编辑文章
+      ↓
+填写信息、上传图片、预览 Markdown
+      ↓
+点击发布
+      ↓
+等待 Cloudflare Pages 自动更新
 ```
 
-只要正式网站已经部署成功，电脑关机不会影响访客访问。
+完成这些步骤后，电脑可以正常关机，正式网站会继续运行。
