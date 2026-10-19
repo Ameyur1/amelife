@@ -1,0 +1,77 @@
+backend:
+  name: github
+  repo: Ameyur1/amelife
+  branch: main
+  base_url: https://amelife.pages.dev
+  auth_endpoint: api/cms/auth
+  site_domain: amelife.pages.dev
+  use_graphql: false
+  open_authoring: false
+  commit_messages:
+    create: 'cms: create {{collection}} “{{slug}}”'
+    update: 'cms: update {{collection}} “{{slug}}”'
+    delete: 'cms: delete {{collection}} “{{slug}}”'
+    uploadMedia: 'cms: upload “{{path}}”'
+    deleteMedia: 'cms: delete media “{{path}}”'
+
+locale: zh_Hans
+site_url: https://amelife.pages.dev
+display_url: https://amelife.pages.dev
+logo_url: /images/avatars/ameyuri-avatar.jpg
+publish_mode: simple
+media_folder: public/images/posts
+public_folder: /images/posts
+# Decap's built-in Git media library stores images in the existing repository.
+slug:
+  encoding: unicode
+  clean_accents: false
+  sanitize_replacement: '-'
+
+collections:
+  - name: posts
+    label: 文章（Markdown）
+    label_singular: 文章
+    folder: src/content/blog
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    # Astro reads the publish date from Frontmatter. Avoid date prefixes here:
+    # date-only values can cross a UTC boundary while Decap builds a filename.
+    slug: '{{slug}}'
+    summary: '{{title}} · {{category}} · {{date}}'
+    sortable_fields: [date, title, category]
+    view_filters:
+      - { label: 草稿, field: draft, pattern: true }
+      - { label: 精选, field: featured, pattern: true }
+    fields: &post_fields
+      - { label: 标题, name: title, widget: string }
+      - { label: 文章简介, name: description, widget: text }
+      - label: 发布日期
+        name: date
+        widget: datetime
+        default: '{{now}}'
+        date_format: YYYY-MM-DD
+        time_format: false
+      - { label: 分类, name: category, widget: select, options: [学术, 杂谈, 日常], default: 日常 }
+      - { label: 标签, name: tags, widget: list, default: [], required: false, hint: '可输入多个标签，使用逗号或回车分隔。' }
+      - { label: 草稿（网站隐藏）, name: draft, widget: boolean, default: false, hint: '开启后仍会保存到 GitHub，但博客不生成文章页面。公开仓库内的文件不保密。' }
+      - { label: 精选, name: featured, widget: boolean, default: false }
+      - { label: 更新日期（可选）, name: updated, widget: string, required: false, pattern: ['^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$', '请填写 YYYY-MM-DD，或留空。'] }
+      - { label: 自定义封面（可选）, name: cover, widget: image, required: false, hint: '留空使用分类默认封面。' }
+      - { label: 封面说明（可选）, name: coverAlt, widget: string, required: false }
+      - { label: 封面位置（可选）, name: coverPosition, widget: string, required: false, hint: '例如 center 25%；留空沿用默认位置。' }
+      - { label: 正文, name: body, widget: markdown, modes: [raw], hint: 'Markdown 源码编辑，右侧实时预览；通过图片按钮上传并插入图片。' }
+  - name: mdx_posts
+    label: 文章（MDX）
+    label_singular: MDX 文章
+    folder: src/content/blog
+    create: true
+    delete: true
+    extension: mdx
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} · {{category}} · {{date}}'
+    fields: *post_fields
+    editor:
+      preview: false

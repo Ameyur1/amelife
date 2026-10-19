@@ -15,7 +15,7 @@ Amelife 是一个完整、可静态部署的个人主页与博客项目。它使
 
 ## 本地安装与启动
 
-需要 Node.js 20 或更高版本。
+需要 Node.js 22.12 或更高版本。
 
 ```bash
 npm install
@@ -47,7 +47,7 @@ description: "一句话描述"
 date: 2026-10-01
 updated: 2026-10-02
 cover: "/images/posts/my-cover.jpg"
-category: "技术"
+category: "学术"
 tags: ["Astro", "学习"]
 draft: false
 featured: false
@@ -143,7 +143,13 @@ git push -u origin main
 5. Build output directory 填 `dist`。
 6. 保存并部署。以后推送到 `main` 分支会自动重新构建。
 
-这个项目是纯静态站点，不需要 VPS、数据库或服务器环境变量。
+博客页面为静态输出，不需要 VPS 或数据库。可视化后台的 GitHub OAuth 使用 Pages Functions，需要按下方后台指南配置运行时 Secrets。
+
+## 可视化文章管理后台
+
+入口为 `/admin/`，采用 Decap CMS + GitHub App OAuth，可创建、编辑、删除 Markdown/MDX 文章，管理标签、分类、草稿、精选和图片。发布直接提交到当前 `main` 分支并触发现有 Pages 部署。
+
+首次启用必须配置 GitHub App 和 Cloudflare Secrets；未配置时拒绝登录。完整配置、发布/草稿/图片流程、安全边界和验收步骤见 [后台使用与配置指南](docs/admin-guide.md)。
 
 ## 绑定自己的域名
 
@@ -183,7 +189,7 @@ public/images/        # 集中管理的图片资源
 ## 当前没有实现的功能
 
 - 评论系统（文章页已预留位置）
-- 登录、后台与数据库
+- 数据库（后台直接使用 GitHub，不需要数据库）
 - 视频、随机或每日背景
 - 服务端全文检索（当前搜索标题、描述、分类和标签）
 - 真实 GitHub 用户名、个人姓名、正式域名与社交账号

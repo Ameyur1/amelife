@@ -1,0 +1,7 @@
+# Copy to .dev.vars for wrangler pages dev. Never commit the real .dev.vars.
+# OAuth itself is restricted to https://amelife.pages.dev, not local/preview URLs.
+GITHUB_CLIENT_ID="your-github-app-client-id"
+GITHUB_CLIENT_SECRET="your-github-app-client-secret"
+OAUTH_STATE_SECRET="generate-at-least-32-random-characters"
+GITHUB_REPOSITORY_ID="numeric-github-repository-id"
+CMS_ALLOWED_USERS="Ameyur1"
