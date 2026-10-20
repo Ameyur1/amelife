@@ -6,7 +6,7 @@
 
 经检查，本项目使用 Astro 7.3.5 静态输出、TypeScript、Markdown/MDX 内容集合。文章目录为 `src/content/blog/`，字段约束在 `src/content.config.ts`，公开文章通过 `src/utils/posts.ts` 的 `sortPosts()` 统一过滤草稿。文章、列表、分类、标签、搜索和 RSS 均使用此过滤。文章 URL 来自 Astro 生成的文件 ID，不从标题字段重新命名。
 
-后台采用 Decap CMS 3.17.1 + GitHub backend。它直接读写 `Ameyur1/amelife` 的 `main` 分支，复用当前 Cloudflare Pages Git 集成。没有数据库、内容迁移或常驻服务器。CMS 页面静态托管；只有 `/api/cms/auth` 和 `/api/cms/callback` 使用 Pages Functions。`public/_routes.json` 保证普通博客页面继续走静态资源，不消耗 Functions 请求。
+后台采用 Decap CMS 3.17.1 + GitHub backend。它直接读写 `Ameyur1/amelife` 的 `main` 分支，复用当前 Cloudflare Pages Git 集成。没有数据库、内容迁移或常驻服务器。CMS 页面静态托管；`/api/cms/auth`、`/api/cms/callback` 和限定仓库路径的 `/api/github/*` 使用 Pages Functions。最后一个端点把 Decap 的 GitHub 内容与媒体请求从同域转发到 GitHub API，避免浏览器直连 GitHub 时图片上传失败。它只接受 GitHub App 的短期 `ghu_` 令牌，只允许访问当前账号信息及 `Ameyur1/amelife`，不保存令牌。`public/_routes.json` 保证普通博客页面继续走静态资源，不消耗 Functions 请求。
 
 Decap 支持原生 Markdown 编辑、预览、媒体库、GitHub 内容提交，适合这个仓库。Sveltia CMS 也支持类似工作流，但本次选择 Decap 的现成字段和媒体编辑能力，避免自行实现 GitHub 编辑器。
 
@@ -68,7 +68,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 3. 保持既有设置：Production branch=`main`，Build command=`npm run build`，Build output directory=`dist`，Root directory 为该项目根目录。
 4. 提交本次新增文件并推送后等待最新生产部署 **Success**。根目录 `functions/` 会由 Pages Git 集成编译；`astro build` 只构建静态部分，这是正常的。无需 Astro 服务端适配器。
-5. Secrets 变更后需要新建或重试生产部署才会应用。确认部署的 Functions 信息能看到 `/api/cms/auth` 与 `/api/cms/callback`。
+5. Secrets 变更后需要新建或重试生产部署才会应用。确认部署的 Functions 信息能看到 `/api/cms/auth`、`/api/cms/callback` 与 `/api/github/*`。
 6. 打开正式网址 `/admin/`，点击 GitHub 登录；完成授权后弹窗返回后台。
 
 没有完成密钥配置时，认证端点返回 503 提示，默认拒绝登录。预览部署域名与 localhost 不允许使用生产 OAuth。不要给 Preview 环境复制生产密钥；只从正式网址管理文章。
@@ -119,7 +119,7 @@ featured: false
 
 ### 上传和插入图片
 
-正文工具栏点击图片按钮 → 上传/选择媒体 → 填写图片说明 → 插入。媒体写入 `public/images/posts/`，正文链接形如 `![说明](/images/posts/example.jpg)`。封面图片字段也使用同一媒体库。
+正文工具栏点击图片按钮 → 上传/选择媒体 → 填写图片说明 → 插入。媒体写入 `public/images/posts/`，正文链接形如 `![说明](/images/posts/example.jpg)`。封面图片字段也使用同一媒体库。上传请求经本站的 `/api/github/*` 同域转发，仍由 GitHub 对短期令牌和仓库写权限进行最终校验。
 
 上传前压缩大图，推荐 WebP/JPEG 和简单唯一文件名；不要上传几十 MB 原图。媒体上传可能单独生成一次提交/部署，正文发布后再确认最终部署。不要随意删除媒体库文件：图片可能被别的文章引用。删除文章不会自动删除共享图片。
 
@@ -171,6 +171,7 @@ GitHub App 用户令牌最长 8 小时，到期后重新登录；本实现不自
 | 允许名单错误 | `CMS_ALLOWED_USERS` 填 GitHub 登录名，不是邮箱或显示姓名 |
 | 写权限错误 | App 是否只安装并授权到 amelife；账号是否有 write；仓库 ID 是否正确 |
 | 登录成功但发布 403 | GitHub 分支保护/Rulesets、权限变更、令牌过期 |
+| 文字可发布但图片提示 Failed to fetch | 强制刷新后台并重新登录，确认当前生产部署已包含 `/api/github/*`；在浏览器 Network 中检查请求是否发往本站 `/api/github/repos/Ameyur1/amelife/git/blobs` |
 | 后台不加载 | 浏览器控制台、CDN 请求及 CSP；不要关闭 SRI 或安全校验来绕过 |
 | 发布后网站不更新 | 看 Pages 最新 commit 的 build log；确认 main、npm run build、dist；不要只看旧部署 Success |
 | pnpm 锁文件过期 | 新增依赖后同步 pnpm-lock.yaml；本功能没有新增 npm 依赖 |

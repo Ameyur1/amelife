@@ -104,6 +104,7 @@ test('CMS config uses existing paths/schema, both extensions and required defaul
   const c = parse(readFileSync('public/admin/config.yml', 'utf8'));
   assert.equal(c.backend.repo, 'Ameyur1/amelife');
   assert.equal(c.backend.branch, 'main');
+  assert.equal(c.backend.api_root, 'https://amelife.pages.dev/api/github');
   assert.equal(c.backend.open_authoring, false);
   assert.equal(c.media_folder, 'public/images/posts');
   assert.equal(c.public_folder, '/images/posts');

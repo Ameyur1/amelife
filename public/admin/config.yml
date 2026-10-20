@@ -4,6 +4,9 @@ backend:
   branch: main
   base_url: https://amelife.pages.dev
   auth_endpoint: api/cms/auth
+  # Keep GitHub content/media requests on the site origin. The Pages Function
+  # forwards only this repository's API paths and avoids browser upload failures.
+  api_root: https://amelife.pages.dev/api/github
   site_domain: amelife.pages.dev
   use_graphql: false
   open_authoring: false
