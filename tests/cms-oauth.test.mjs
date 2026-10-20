@@ -138,6 +138,12 @@ test('admin migrates the forced raw editor to visual mode once', () => {
   assert.equal(values.get('cms.md-mode'), 'raw');
 });
 
+test('admin CSP permits Decap to read newly selected blob images', () => {
+  const headers = readFileSync('public/_headers', 'utf8');
+  assert.match(headers, /connect-src[^;]*\bblob:/);
+  assert.match(headers, /img-src[^;]*\bblob:/);
+});
+
 test('preSave handles optional fields and tags without changing custom images/MDX body', () => {
   let handler;
   const context = { window: { CMS: { registerEventListener(event) { handler = event.handler; }, registerPreviewStyle() {}, init() {} } }, document: { getElementById() { return {}; } } };

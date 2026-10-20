@@ -172,6 +172,7 @@ GitHub App 用户令牌最长 8 小时，到期后重新登录；本实现不自
 | 写权限错误 | App 是否只安装并授权到 amelife；账号是否有 write；仓库 ID 是否正确 |
 | 登录成功但发布 403 | GitHub 分支保护/Rulesets、权限变更、令牌过期 |
 | 文字可发布但图片提示 Failed to fetch | 强制刷新后台并重新登录，确认当前生产部署已包含 `/api/github/*`；在浏览器 Network 中检查请求是否发往本站 `/api/github/repos/Ameyur1/amelife/git/blobs` |
+| 媒体库旧图可用，但新选择的本地图片保存时 Failed to fetch | 确认 `/admin/*` 的 CSP `connect-src` 同时允许 `'self'` 和 `blob:`；Decap 需要读取浏览器生成的临时图片地址后才能提交 Git blob |
 | 后台不加载 | 浏览器控制台、CDN 请求及 CSP；不要关闭 SRI 或安全校验来绕过 |
 | 发布后网站不更新 | 看 Pages 最新 commit 的 build log；确认 main、npm run build、dist；不要只看旧部署 Success |
 | pnpm 锁文件过期 | 新增依赖后同步 pnpm-lock.yaml；本功能没有新增 npm 依赖 |
