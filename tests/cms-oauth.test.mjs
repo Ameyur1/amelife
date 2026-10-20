@@ -118,8 +118,24 @@ test('CMS config uses existing paths/schema, both extensions and required defaul
     assert.equal(fields.featured.default, false);
     assert.equal(fields.date.default, '{{now}}');
     assert.deepEqual(fields.category.options, ['学术', '杂谈', '日常']);
+    assert.deepEqual(fields.body.modes, ['rich_text', 'raw']);
     assert.ok(new RegExp(fields.updated.pattern[0]).test('2026-10-19'));
   }
+});
+
+test('admin migrates the forced raw editor to visual mode once', () => {
+  const setup = readFileSync('public/admin/setup.js', 'utf8');
+  const values = new Map();
+  const localStorage = {
+    getItem(key) { return values.get(key) ?? null; },
+    setItem(key, value) { values.set(key, value); },
+  };
+  vm.runInNewContext(setup, { window: {}, localStorage });
+  assert.equal(values.get('cms.md-mode'), 'rich_text');
+  assert.equal(values.get('amelife-cms-editor-mode-v2'), 'done');
+  values.set('cms.md-mode', 'raw');
+  vm.runInNewContext(setup, { window: {}, localStorage });
+  assert.equal(values.get('cms.md-mode'), 'raw');
 });
 
 test('preSave handles optional fields and tags without changing custom images/MDX body', () => {

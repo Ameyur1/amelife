@@ -64,7 +64,7 @@ collections:
       - { label: 自定义封面（可选）, name: cover, widget: image, required: false, hint: '留空使用分类默认封面。' }
       - { label: 封面说明（可选）, name: coverAlt, widget: string, required: false }
       - { label: 封面位置（可选）, name: coverPosition, widget: string, required: false, hint: '例如 center 25%；留空沿用默认位置。' }
-      - { label: 正文, name: body, widget: markdown, modes: [raw], hint: 'Markdown 源码编辑，右侧实时预览；通过图片按钮上传并插入图片。' }
+      - { label: 正文, name: body, widget: markdown, modes: [rich_text, raw], hint: '默认使用可视化编辑，工具栏“＋”可插入图片；需要直接编辑 Markdown 或 MDX 时切换到源码模式。' }
   - name: mdx_posts
     label: 文章（MDX）
     label_singular: MDX 文章
