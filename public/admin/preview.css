@@ -3,4 +3,4 @@ body{padding:24px;background:#eef1f2;color:#10171c;font:16px/1.95 'Segoe UI','No
 img{display:block;max-width:100%;height:auto;border:1px solid #b9c3c8}
 h1,h2,h3{line-height:1.3}h2{padding:12px 20px;border-left:4px solid #ff4f72;background:#e3e8ea}
 a{color:#cf2448}pre{padding:20px;overflow:auto;background:#10161a;color:#eaf2f3}blockquote{padding:16px 24px;border-left:4px solid #30d7e5;background:#fbfcfc}
-.katex-display{max-width:100%;padding:16px;overflow-x:auto;background:#fbfcfc;border-left:4px solid #30d7e5}
+.katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden}

@@ -78,5 +78,5 @@
 
 /* KaTeX formulas generated from Markdown $...$ and $$...$$ blocks. */
 .prose .math-formula-inline{display:inline-block;max-width:100%;vertical-align:middle}
-.prose .math-formula-display{max-width:100%;margin:1.8rem 0;padding:18px;overflow-x:auto;background:var(--surface);border-left:4px solid var(--accent-2)}
+.prose .math-formula-display{max-width:100%;margin:1.8rem 0;overflow-x:auto;overflow-y:hidden}
 .prose .math-formula-display .katex-display{margin:0}
