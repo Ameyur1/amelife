@@ -45,6 +45,8 @@
     },
   });
 
+  // Preview runs in its own iframe, so it cannot inherit KaTeX styles from index.html.
+  window.CMS.registerPreviewStyle('https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.css');
   window.CMS.registerPreviewStyle('/admin/preview.css');
   window.CMS.init();
   status.hidden = true;

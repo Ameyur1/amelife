@@ -149,8 +149,13 @@ test('admin CSP permits Decap to read newly selected blob images', () => {
 test('preSave handles optional fields and tags without changing custom images/MDX body', () => {
   let handler;
   let math;
-  const context = { window: { CMS: { registerEditorComponent(component) { math = component; }, registerEventListener(event) { handler = event.handler; }, registerPreviewStyle() {}, init() {} } }, document: { getElementById() { return {}; } } };
+  const previewStyles = [];
+  const context = { window: { CMS: { registerEditorComponent(component) { math = component; }, registerEventListener(event) { handler = event.handler; }, registerPreviewStyle(style) { previewStyles.push(style); }, init() {} } }, document: { getElementById() { return {}; } } };
   vm.runInNewContext(readFileSync('public/admin/editor.js', 'utf8'), context);
+  assert.deepEqual(previewStyles, [
+    'https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.css',
+    '/admin/preview.css',
+  ]);
   const block = math.toBlock({ formula: '\\frac{a}{b}', display: true });
   assert.equal(block, '$$\n\\frac{a}{b}\n$$');
   assert.deepEqual({ ...math.fromBlock(math.pattern.exec(block)) }, { formula: '\\frac{a}{b}', display: true });
