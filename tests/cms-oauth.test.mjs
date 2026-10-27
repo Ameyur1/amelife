@@ -117,6 +117,8 @@ test('CMS config uses existing paths/schema, both extensions and required defaul
     assert.equal(fields.draft.default, false);
     assert.equal(fields.featured.default, false);
     assert.equal(fields.date.default, '{{now}}');
+    assert.equal(fields.description.required, false);
+    assert.equal(fields.description.default, '');
     assert.deepEqual(fields.category.options, ['学术', '杂谈', '日常']);
     assert.deepEqual(fields.body.modes, ['rich_text', 'raw']);
     assert.ok(new RegExp(fields.updated.pattern[0]).test('2026-10-19'));
@@ -146,8 +148,13 @@ test('admin CSP permits Decap to read newly selected blob images', () => {
 
 test('preSave handles optional fields and tags without changing custom images/MDX body', () => {
   let handler;
-  const context = { window: { CMS: { registerEventListener(event) { handler = event.handler; }, registerPreviewStyle() {}, init() {} } }, document: { getElementById() { return {}; } } };
+  let math;
+  const context = { window: { CMS: { registerEditorComponent(component) { math = component; }, registerEventListener(event) { handler = event.handler; }, registerPreviewStyle() {}, init() {} } }, document: { getElementById() { return {}; } } };
   vm.runInNewContext(readFileSync('public/admin/editor.js', 'utf8'), context);
+  const block = math.toBlock({ formula: '\\frac{a}{b}', display: true });
+  assert.equal(block, '$$\n\\frac{a}{b}\n$$');
+  assert.deepEqual({ ...math.fromBlock(math.pattern.exec(block)) }, { formula: '\\frac{a}{b}', display: true });
+  assert.equal(math.toBlock({ formula: 'E=mc^2', display: false }), '$E=mc^2$');
   const map = new Map([['cover', ''], ['coverAlt', null], ['updated', '2026-10-05'], ['body', 'import Demo from "./Demo.astro";\n<Demo />'], ['tags', ['  Astro ', 'Astro', '']]]);
   map.delete = function (key) { Map.prototype.delete.call(this, key); return this; };
   const result = handler({ entry: new Map([['data', map]]) });

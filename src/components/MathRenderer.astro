@@ -1,0 +1,25 @@
+---
+import 'katex/dist/katex.min.css';
+---
+
+<script>
+  const formulas = [...document.querySelectorAll<HTMLElement>('code.math-inline, code.math-display')];
+  if (formulas.length > 0) {
+    import('katex').then(({ default: katex }) => {
+      for (const source of formulas) {
+        const displayMode = source.classList.contains('math-display');
+        const target = document.createElement(displayMode ? 'div' : 'span');
+        target.className = `math-formula ${displayMode ? 'math-formula-display' : 'math-formula-inline'}`;
+        try {
+          katex.render(source.textContent ?? '', target, { displayMode, throwOnError: false, strict: 'warn' });
+          if (displayMode && source.parentElement?.tagName === 'PRE') source.parentElement.replaceWith(target);
+          else source.replaceWith(target);
+        } catch {
+          target.textContent = source.textContent;
+          target.dataset.mathError = 'true';
+          source.replaceWith(target);
+        }
+      }
+    });
+  }
+</script>

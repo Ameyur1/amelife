@@ -49,7 +49,7 @@ collections:
       - { label: 精选, field: featured, pattern: true }
     fields: &post_fields
       - { label: 标题, name: title, widget: string }
-      - { label: 文章简介, name: description, widget: text }
+      - { label: 文章简介（可选）, name: description, widget: text, required: false, default: '' }
       - label: 发布日期
         name: date
         widget: datetime

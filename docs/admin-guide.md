@@ -78,19 +78,20 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ### 创建和发布 Markdown 文章
 
 1. 登录 `/admin/`，选择 **文章（Markdown）→ ＋文章**。
-2. 输入标题、简介，日期自动填当天；选择学术、杂谈或日常。
+2. 输入标题；简介可留空。日期自动填当天；选择学术、杂谈或日常。
 3. 添加标签。`draft` 与 `featured` 默认关闭。
 4. 正文默认使用可视化模式，格式工具栏与“＋”图片菜单可直接操作；需要编写 Markdown 源码时，通过工具栏的模式按钮切换到源码模式。MDX、原始 HTML 和特殊格式建议始终使用源码模式，避免可视化转换改变内容。
-5. 可选自定义封面；留空使用现有分类默认封面。原有 `updated`、`cover`、`coverAlt`、`coverPosition` 都可以编辑，留空时不会写入 `null` 导致 Astro 构建失败。
-6. 点击 **发布 / Publish**（具体中文按钮取决于 Decap 界面）。后台直接创建 GitHub commit；新文章文件名由标题生成，文件格式为 YAML Frontmatter + Markdown。发布日期以 Frontmatter 为准，避免不同时区在午夜附近生成错误的日期前缀。
-7. 去 Cloudflare 确认新 commit 的部署成功后，网站才会更新。保存成功不等于已经部署成功。
+5. 插入公式时选择工具栏“＋”→“公式”，输入 LaTeX 并选择是否独立成行。源码模式也可直接写行内 `$E=mc^2$`，或用单独两行 `$$` 包住块级公式。后台预览与正式文章均使用 KaTeX 渲染。
+6. 可选自定义封面；留空使用现有分类默认封面。原有 `updated`、`cover`、`coverAlt`、`coverPosition` 都可以编辑，留空时不会写入 `null` 导致 Astro 构建失败。
+7. 点击 **发布 / Publish**（具体中文按钮取决于 Decap 界面）。后台直接创建 GitHub commit；新文章文件名由标题生成，文件格式为 YAML Frontmatter + Markdown。发布日期以 Frontmatter 为准，避免不同时区在午夜附近生成错误的日期前缀。
+8. 去 Cloudflare 确认新 commit 的部署成功后，网站才会更新。保存成功不等于已经部署成功。
 
 示例生成格式：
 
 ```markdown
 ---
 title: 我的新文章
-description: 文章简介
+description: 文章简介（可省略或留空）
 date: 2026-10-19
 category: 日常
 tags:

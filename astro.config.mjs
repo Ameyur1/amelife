@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   markdown: {
     processor: satteri({
+      features: { math: true },
       hastPlugins: [imgAttr({ defaults: { loading: 'lazy', decoding: 'async' } })],
     }),
     shikiConfig: { theme: 'github-dark-default', wrap: true },

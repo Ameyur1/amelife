@@ -6,6 +6,28 @@
     return;
   }
 
+  window.CMS.registerEditorComponent({
+    id: 'math',
+    label: '公式',
+    fields: [
+      { name: 'formula', label: 'LaTeX 公式', widget: 'text', hint: '例如：E = mc^2 或 \\frac{a}{b}' },
+      { name: 'display', label: '独立成行', widget: 'boolean', default: true },
+    ],
+    pattern: /^(?:\$\$\n([\s\S]+?)\n\$\$|\$([^$\n]+)\$)$/,
+    fromBlock(match) {
+      return { formula: match[1] ?? match[2] ?? '', display: Boolean(match[1]) };
+    },
+    toBlock({ formula = '', display = true }) {
+      const value = String(formula).trim();
+      return display ? `$$\n${value}\n$$` : `$${value}$`;
+    },
+    toPreview({ formula = '', display = true }) {
+      const value = String(formula).trim();
+      if (!window.katex) return `<code>${value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</code>`;
+      return window.katex.renderToString(value, { displayMode: Boolean(display), throwOnError: false, strict: 'warn' });
+    },
+  });
+
   window.CMS.registerEventListener({
     name: 'preSave',
     handler: ({ entry }) => {
