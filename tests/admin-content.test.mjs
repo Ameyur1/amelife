@@ -14,7 +14,7 @@ test('new CMS Markdown/MDX render; draft has no public route/index; existing lin
     await symlink(join(root, 'node_modules'), join(temp, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     const meta = (title, draft, description = 'CMS integration fixture') => `---\ntitle: ${title}\n${description == null ? '' : `description: ${description}\n`}date: 2026-10-19\ncategory: 学术\ntags: [cms-unique-fixture]\ndraft: ${draft}\nfeatured: false\n---\n\n`;
     const folder = join(temp, 'src/content/blog');
-    await writeFile(join(folder, 'cms-visible-fixture.md'), meta('CMS published fixture', false, null) + '# Heading\n\nInline $E = mc^2$.\n\n$$\n\\int_0^1 x^2 dx\n$$\n\n![alt](/images/posts/default.jpg)\n\n```ts\nconst x: number = 1;\n```\n');
+    await writeFile(join(folder, 'cms-visible-fixture.md'), meta('CMS published fixture', false, null) + '# Heading\n\nInline $E = mc^2$.\n\n$$\n\\int_0^1 x^2 dx\n$$\n\n![alt](/images/posts/default.jpg)\n\n![remote chart](https://images.example.com/chart.png)\n\n```ts\nconst x: number = 1;\n```\n');
     await writeFile(join(folder, 'cms-hidden-fixture.md'), meta('CMS hidden fixture', true) + '# Hidden\n\nSECRET_FIXTURE_DO_NOT_PUBLISH\n');
     await writeFile(join(folder, 'cms-mdx-fixture.mdx'), meta('CMS MDX fixture', false) + 'export const count = 3;\n\n## MDX heading\n\n<span data-cms-mdx>{count}</span>\n');
     const pkg = JSON.parse(await readFile(join(root, 'node_modules/astro/package.json'), 'utf8'));
@@ -27,6 +27,7 @@ test('new CMS Markdown/MDX render; draft has no public route/index; existing lin
     assert.ok(!posts.includes('cms-hidden-fixture'));
     const generated = await readFile(join(temp, 'dist/posts/cms-visible-fixture/index.html'), 'utf8');
     assert.match(generated, /loading="lazy"/);
+    assert.match(generated, /src="https:\/\/images\.example\.com\/chart\.png"/);
     assert.match(generated, /astro-code/);
     assert.match(generated, /class="language-math math-inline"/);
     assert.match(generated, /class="language-math math-display"/);
