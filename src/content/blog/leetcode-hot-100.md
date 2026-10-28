@@ -1,0 +1,854 @@
+---
+title: LeetCode hot 100
+description: 慢慢更新
+date: 2026-10-28
+category: 学术
+tags:
+  - java
+draft: false
+featured: false
+cover: /images/posts/ChatGPT Image 2026年5月26日 21_40_45.png
+---
+
+
+
+
+# 力扣 100题
+
+## 哈希
+
+### 两数之和
+
+给定一个整数数组 `nums` 和一个整数目标值 `target`，请你在该数组中找出 **和为目标值** *`target`* 的那 **两个** 整数，并返回它们的数组下标。
+
+你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。
+
+你可以按任意顺序返回答案。
+
+
+
+**示例 1：**
+
+```
+输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+```
+
+**示例 2：**
+
+```
+输入：nums = [3,2,4], target = 6
+输出：[1,2]
+```
+
+**示例 3：**
+
+```
+输入：nums = [3,3], target = 6
+输出：[0,1]
+```
+
+
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        
+        for (int x =0;x<nums.length;x++){
+            for(int y= x+1;y<nums.length;y++){
+                if (nums[x]+nums[y]==target){
+                    return new int[] {x,y};
+                }
+            }
+        }
+        return new int[]{};
+    }
+}
+```
+
+### 字母异位词分组
+
+给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。 
+示例 1:
+
+```
+输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+解释：
+• 在 strs 中没有字符串可以通过重新排列来形成 "bat"。
+• 字符串 "nat" 和 "tan" 是字母异位词，因为它们可以重新排列以形成彼此。
+• 字符串 "ate" ，"eat" 和 "tea" 是字母异位词，因为它们可以重新排列以形成彼此。
+示例 2:
+
+```
+输入: strs = [""]
+输出: [[""]]
+```
+
+示例 3:
+
+```
+输入: strs = ["a"]
+输出: [["a"]]
+```
+
+
+
+###  最长连续序列
+
+给定一个未排序的整数数组 `nums` ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+请你设计并实现时间复杂度为 `O(n)` 的算法解决此问题。
+
+ 
+
+**示例 1：**
+
+```
+输入：nums = [100,4,200,1,3,2]
+输出：4
+解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+```
+
+**示例 2：**
+
+```
+输入：nums = [0,3,7,2,5,8,4,6,0,1]
+输出：9
+```
+
+**示例 3：**
+
+```
+输入：nums = [1,0,1,2]
+输出：3
+```
+
+```java
+import static java.util.Arrays.sort;
+class Solution {
+        public static int longestConsecutive(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        sort(nums);
+        int length = 1;
+        int maxLength = 1;
+        for (int i = 0; i < nums.length-1; i++) {
+            // 重复数字，跳过
+            if (nums[i] == nums[i+1]) continue;
+            // 下一个数字比当前一个数字大1，说明连续
+            if (nums[i+1] == nums[i] + 1) {
+                length++;
+            } else {
+                // 不连续，重新计数
+                length = 1;
+            }
+            if (length > maxLength) maxLength = length;
+        }
+        return maxLength;
+    }
+}
+```
+
+
+
+## 双指针
+
+### 移动零
+
+给定一个数组 `nums`，编写一个函数将所有 `0` 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+**请注意** ，必须在不复制数组的情况下原地对数组进行操作。
+
+
+
+**示例 1:**
+
+```
+输入: nums = [0,1,0,3,12]
+输出: [1,3,12,0,0]
+```
+
+**示例 2:**
+
+```
+输入: nums = [0]
+输出: [0]
+```
+
+**提示**:
+
+- `1 <= nums.length <= 104`
+- `-231 <= nums[i] <= 231 - 1`
+
+
+
+**进阶：**你能尽量减少完成的操作次数吗？
+
+```java
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int index=0;
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=0) {
+                nums[index]=nums[i];
+                index++;
+            }
+        }
+        for (int i=index;i<nums.length;i++){
+            nums[i]=0;
+        }
+    }
+}
+```
+
+```java
+class Solution {
+   public void moveZeroes(int[] nums) {
+        
+        int slow=0;
+        for (int fast=0;fast<nums.length;fast++){
+            if (nums[fast]!=0) {
+                nums[slow]=nums[fast];
+                if (fast>slow) nums[fast]=0;
+                slow++;
+            }
+        }       
+    }
+}
+```
+
+### 盛最多水的容器
+
+给定一个长度为 `n` 的整数数组 `height` 。有 `n` 条垂线，第 `i` 条线的两个端点是 `(i, 0)` 和 `(i, height[i])` 。
+
+找出其中的两条线，使得它们与 `x` 轴共同构成的容器可以容纳最多的水。
+
+返回容器可以储存的最大水量。
+
+**说明：**你不能倾斜容器。
+
+ 
+
+**示例 1：**
+
+![img](https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg)
+
+```
+输入：[1,8,6,2,5,4,8,3,7]
+输出：49 
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+```
+
+**示例 2：**
+
+```
+输入：height = [1,1]
+输出：1
+```
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+
+        int left = 0;
+        int right =height.length-1;
+        int maxCapacity=0;
+        while (right>left){
+            int h=Math.min(height[left],height[right]);
+            if ((right-left)*h>maxCapacity) maxCapacity=(right-left)*h;
+            if (height[left]>height[right]){
+                right--;
+            }else {
+                left++;
+            }
+        }
+        return maxCapacity;
+    }
+}
+```
+
+
+
+## 滑动窗口
+
+### 无重复字符的最长子串
+
+给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长 子串** 的长度。
+
+ 
+
+**示例 1:**
+
+```
+输入: s = "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。注意 "bca" 和 "cab" 也是正确答案。
+```
+
+**示例 2:**
+
+```
+输入: s = "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+```
+
+**示例 3:**
+
+```
+输入: s = "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+```
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int length = s.length();
+        char[] result=new char[length];
+        for (int index=0; index<length;index++){
+            result[index]=s.charAt(index);
+        }
+        int maxSub=0;
+        int slow=0;
+        int fast=0;
+        if (length==0||length==1){
+            return length;
+        }else {
+            while (fast<length-1){
+                boolean isR=false;
+                for (int i=slow;i<=fast;i++){
+                    if (result[fast+1]==result[i]) isR=true;
+
+                }
+                if (isR){
+                    slow++;
+                }else {
+                    fast++;
+                }
+                if (slow>fast) fast++;
+                int sub=(fast-slow)+1;
+                if (sub>maxSub) maxSub=sub;
+            }
+        }
+        return maxSub;
+    }
+}
+```
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxSub = 0;
+        int slow = 0;
+
+        for (int fast = 0; fast < s.length(); fast++) {
+
+            for (int i = slow; i < fast; i++) {
+                if (s.charAt(i) == s.charAt(fast)) {
+                    slow = i + 1;
+                    break;
+                }
+            }
+
+            int sub = fast - slow + 1;
+            if (sub > maxSub) {
+                maxSub = sub;
+            }
+        }
+
+        return maxSub;
+    }
+}
+```
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxSub = 0;
+        int slow = 0;
+        int[] last = new int[65536];
+
+        for (int fast = 0; fast < s.length(); fast++) {
+            char c = s.charAt(fast);
+
+            slow = Math.max(slow, last[c]);
+
+            last[c] = fast + 1;
+
+            maxSub = Math.max(maxSub, fast - slow + 1);
+        }
+
+        return maxSub;
+    }
+}
+```
+
+## 子串
+
+## 普通数组
+
+### 最大子数组和
+
+给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**子数组**是数组中的一个连续部分。
+
+ 
+
+**示例 1：**
+
+```
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+```
+
+**示例 2：**
+
+```
+输入：nums = [1]
+输出：1
+```
+
+**示例 3：**
+
+```
+输入：nums = [5,4,-1,7,8]
+输出：23
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 105`
+- `-104 <= nums[i] <= 104`
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int sum = nums[0];
+        int max = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            sum = Math.max(nums[i], sum + nums[i]);
+            max = Math.max(max, sum);
+        }
+
+        return max;
+    }
+}
+```
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int max = nums[0];
+
+        for (int i = 0; i < nums.length; i++) {
+            int sum = 0;
+
+            for (int j = i; j < nums.length; j++) {
+                sum += nums[j];
+                max = Math.max(max, sum);
+            }
+        }
+
+        return max;
+    }
+}
+```
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+
+
+        int[] sub=new int[nums.length];//sub[i]是指以nums[i]为右边界的最大子数组和
+        sub[0]=nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            sub[i]= Math.max(nums[i], sub[i-1] + nums[i]);
+        }
+        int max =sub[0];
+        for (int i=0;i<sub.length; i++){
+            max=Math.max(max,sub[i]);
+        }
+        return max;
+    }
+}
+//其实本质和解法1是一样的
+```
+
+### 合并区间
+
+以数组 `intervals` 表示若干个区间的集合，其中单个区间为 `intervals[i] = [starti, endi]` 。请你合并所有重叠的区间，并返回 *一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间* 。
+
+ 
+
+**示例 1：**
+
+```
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+```
+
+**示例 2：**
+
+```
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+```
+
+**示例 3：**
+
+```
+输入：intervals = [[4,7],[1,4]]
+输出：[[1,7]]
+解释：区间 [1,4] 和 [4,7] 可被视为重叠区间。
+```
+
+ 
+
+**提示：**
+
+- `1 <= intervals.length <= 104 `
+- `intervals[i].length == 2`
+- `0 <= starti <= endi <= 104`
+
+```java
+class Solution {
+    public  int[][] merge(int[][] intervals) {
+        int left=intervals[0][0];
+        int right =intervals[0][1];
+
+        for (int i=0;i< intervals.length;i++){
+            left =Math.min(left,intervals[i][0]);
+            right =Math.max(right,intervals[i][1]);
+        }
+
+        System.out.println(right);
+
+        int distance = right ;
+        boolean qujian[]=new boolean[distance+1];
+        boolean point[] =new boolean[distance+1];
+        for (int i=0;i<intervals.length; i++){
+            for (int j=intervals[i][0];j<intervals[i][1];j++){
+                qujian[j]=true;
+            }
+        }
+        for (int i=0;i<intervals.length; i++){
+            if (intervals[i][0]==intervals[i][1]){
+                if ((intervals[i][0]==left)&&(!qujian[left]) ){
+                    point[left]=true;
+                } else if ((intervals[i][0]!=left)&&(!qujian[intervals[i][0]-1])&&(!qujian[intervals[i][0]])) {
+                    point[intervals[i][0]]=true;
+                }
+            }
+        }
+
+        int count =1;
+
+        for (int i=left+1;i<=right;i++){
+            if ((!qujian[i-1])&&(qujian[i])){
+                count++;
+            } else if (point[i]) {
+                count++;
+            }
+        }
+
+
+        
+        int[][] combinedQujian = new int[count][2];
+        combinedQujian[0][0]=left;
+        
+        int leftCounter=1;
+        int rightCounter=0;
+        if (point[left]) {
+            combinedQujian[rightCounter][1]=left;
+            rightCounter++;
+        }
+        for (int i=left+1; i<=right;i++){
+            if ((!qujian[i-1] && qujian[i])||(point[i])) {
+                combinedQujian[leftCounter][0]=i;
+                leftCounter++;
+            }
+        }
+        for (int i=left+1; i<=right;i++){
+            if ((qujian[i-1]&&!qujian[i])||point[i]){
+                combinedQujian[rightCounter][1]=i;
+                 rightCounter++;
+            }
+        }
+        return combinedQujian;
+    }
+}
+```
+
+```java
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        // 1. 按左端点升序排序
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        List<int[]> merged = new ArrayList<>();
+        int[] cur = intervals[0];   // 当前正在合并的区间
+
+        // 2. 遍历并合并
+        for (int i = 1; i < intervals.length; i++) {
+            int[] next = intervals[i];
+            if (next[0] <= cur[1]) {
+                // 有重叠（或端点相接）：扩展右端点
+                cur[1] = Math.max(cur[1], next[1]);
+            } else {
+                // 无重叠：当前区间定稿，next 成为新的当前区间
+                merged.add(cur);
+                cur = next;
+            }
+        }
+        merged.add(cur);            // 别忘了最后一组
+
+        // 3. 转成二维数组返回
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
+```
+
+```java
+import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+
+        // 按照区间左端点升序排序
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        List<int[]> result = new ArrayList<>();
+
+        for (int[] interval : intervals) {
+
+            // 如果结果为空，或两个区间不重叠
+            if (result.isEmpty() ||
+                result.get(result.size() - 1)[1] < interval[0]) {
+
+                result.add(interval);
+
+            } else {
+
+                // 发生重叠，更新上一个区间的右端点
+                int[] last = result.get(result.size() - 1);
+                last[1] = Math.max(last[1], interval[1]);
+            }
+        }
+
+        return result.toArray(new int[result.size()][]);
+    }
+}
+```
+
+### 轮转数组
+
+给定一个整数数组 `nums`，将数组中的元素向右轮转 `k` 个位置，其中 `k` 是非负数。
+
+ 
+
+**示例 1:**
+
+```
+输入: nums = [1,2,3,4,5,6,7], k = 3
+输出: [5,6,7,1,2,3,4]
+解释:
+向右轮转 1 步: [7,1,2,3,4,5,6]
+向右轮转 2 步: [6,7,1,2,3,4,5]
+向右轮转 3 步: [5,6,7,1,2,3,4]
+```
+
+**示例 2:**
+
+```
+输入：nums = [-1,-100,3,99], k = 2
+输出：[3,99,-1,-100]
+解释: 
+向右轮转 1 步: [99,-1,-100,3]
+向右轮转 2 步: [3,99,-1,-100]
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 105`
+- `-231 <= nums[i] <= 231 - 1`
+- `0 <= k <= 105`
+
+ 
+
+**进阶：**
+
+- 尽可能想出更多的解决方案，至少有 **三种** 不同的方法可以解决这个问题。
+- 你可以使用空间复杂度为 `O(1)` 的 **原地** 算法解决这个问题吗？
+
+```java
+class Solution {
+    public void rotate(int[] nums, int k) {
+        int length = nums.length;
+        int[] result=new int[length];
+        for(int i=0;i<length;i++){
+            result[(i+k)%length]=nums[i];
+        }
+        for(int i=0;i<length;i++){
+            nums[i]=result[i];
+        }
+    }
+}
+```
+
+```java
+class Solution {
+    public void rotate(int[] nums, int k) {
+        int n = nums.length;
+        k = k % n;
+
+        reverse(nums, 0, n - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, n - 1);
+    }
+
+    public void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+    }
+}
+```
+
+## 二分查找
+
+### 搜索插入位置
+
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+请必须使用时间复杂度为 `O(log n)` 的算法。
+
+ 
+
+**示例 1:**
+
+```
+输入: nums = [1,3,5,6], target = 5
+输出: 2
+```
+
+**示例 2:**
+
+```
+输入: nums = [1,3,5,6], target = 2
+输出: 1
+```
+
+**示例 3:**
+
+```
+输入: nums = [1,3,5,6], target = 7
+输出: 4
+```
+
+ 
+
+**提示:**
+
+- `1 <= nums.length <= 104`
+- `-104 <= nums[i] <= 104`
+- `nums` 为 **无重复元素** 的 **升序** 排列数组
+- `-104 <= target <= 104`
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+
+        int left = 0;
+        int right=nums.length-1;
+        if (target<nums[left]) return 0;
+        if (target>nums[right]) return nums.length;
+        while (left<right){
+            int mid = (left+right+1)/2;
+            if (target>=nums[mid]){
+                left=mid;
+            }else {
+                right =mid-1;
+            }
+
+        }
+        if (target==nums[left]){
+            return left;
+        }else {
+            return left+1;
+        }
+    }
+}
+```
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        return left;
+    }
+}
+```
+
+### 搜索二维矩阵
+
+给你一个满足下述两条属性的 `m x n` 整数矩阵：
+
+- 每行中的整数从左到右按非严格递增顺序排列。
+- 每行的第一个整数大于前一行的最后一个整数。
+
+给你一个整数 `target` ，如果 `target` 在矩阵中，返回 `true` ；否则，返回 `false` 。
+
+你必须编写一个时间复杂度为 `O(log(m * n))` 的解决方案。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/10/05/mat.jpg)
+
+```
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+输出：true
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.cn/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg)
+
+```
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+输出：false
+```
