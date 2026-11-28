@@ -13,10 +13,17 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.js" integrity="sha384-a1WQdjRj162i159OYq041X6I4K8NenkrI09LlPmiHg0YOb7CR+wJOraXwK9abpnE" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/decap-cms@3.17.1/dist/decap-cms.js" integrity="sha384-d2pbrhjc5asvSK35gKkrgRIk0Wq+2CQynWnXtSsYWQawXCgBXhcAK737jBAKXT4T" crossorigin="anonymous"></script>
     <script defer src="/admin/editor.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.1/dist/js-yaml.min.js" integrity="sha384-ZeqCzuWczURac3RacSufGD7oSbzeaX7xxnnOr3PTcYTLx4Av0qBj0kBq7AeCtHLA" crossorigin="anonymous"></script>
+    <script type="module" src="/admin/import-md.js"></script>
   </head>
   <body>
     <noscript>文章管理需要启用 JavaScript。<a href="/">返回博客</a></noscript>
     <div id="admin-status" role="status">正在加载文章管理… 若长时间没有变化，请检查浏览器能否访问 cdn.jsdelivr.net。</div>
     <div id="nc-root"></div>
+    <aside id="md-import" hidden aria-label="导入 Markdown 文件">
+      <button type="button" id="md-choose">拖入 .md 文件，或点击选择</button>
+      <input type="file" accept=".md" id="md-file" hidden />
+      <span role="status" aria-live="polite" id="md-feedback"></span>
+    </aside>
   </body>
 </html>
